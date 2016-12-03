@@ -1,5 +1,3 @@
-S = "TATATG"
-
 def TreeCreation(S):
 	S = S + "$"
 	nodes = []
@@ -41,3 +39,18 @@ def TreeCreation(S):
  				cur_node = to_node		
 
 	return [nodes, edges]
+
+def LeavesLabel(i, nodes, edges, suff):
+    suff += edges[i]
+    if nodes[i][0] == -1:
+        print suff
+        return suff
+    lCount = 0
+    for k in nodes[i]:
+        suff += + LeavesLabel(k, nodes, edges, suff)
+    return suff
+
+file_obj = open('example_utf8.txt', 'r')
+s = file_obj.readline()
+nodes, edges = TreeCreation(s)
+LeavesLabel(0, nodes, edges, "")
