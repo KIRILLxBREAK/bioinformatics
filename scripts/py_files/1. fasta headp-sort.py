@@ -1,7 +1,5 @@
 def heapsort(lst):
-    ''' Heapsort. Note: this function sorts in-place (it mutates the list). '''
-    # in pseudo-code, heapify only called once, so inline it here
-    for start in range(int(len(lst)/2), -1, -1):#range(int((len(lst)-2)/2), -1, -1):
+    for start in range(int(len(lst)/2), -1, -1):
         siftdown(lst, start, len(lst)-1)
  
     for end in range(len(lst)-1, 0, -1):
