@@ -1,0 +1,86 @@
+from Bio.SubsMat import MatrixInfo
+pam250 = MatrixInfo.pam250
+
+
+from Bio import SeqIO
+fasta_sequences = SeqIO.parse(open("rosalind_loca.txt"),'fasta')
+name = []
+sequence = []
+for fasta in fasta_sequences:
+    name.append(fasta.id)
+    sequence.append(str(fasta.seq))
+v = sequence[0]
+w = sequence[1]
+
+#v = "MEANLYPRTEINSTRING"
+#w = "PLEASANTLYEINSTEIN"
+
+a = [["" for x in range(len(w)+1)] for y in range(len(v)+1)]
+b = [["" for x in range(len(w))] for y in range(len(v))]
+for i in range(0, len(v)+1):
+    a[i][0] = -i*5
+for j in range(0, len(w)+1):
+    a[0][j] = -j*5
+
+for i in range(0, len(v)):
+    b[i][0] = 1 # DOWN
+for j in range(0, len(w)):
+    b[0][j] = 2 # RIGHT
+
+
+
+for i in range(1, len(v)+1):
+    for j in range(1, len(w)+1):
+        if (v[i-1],w[j-1]) in pam250.keys():
+            a[i][j]=a[i-1][j-1] + pam250[(v[i-1],w[j-1])]
+        else:
+            a[i][j]=a[i-1][j-1] + pam250[(w[j-1],v[i-1])]
+        b[i-1][j-1] = 3 # DIAGONAL
+        if (a[i][j] < a[i-1][j]-5):
+            a[i][j] = a[i-1][j]-5
+            b[i-1][j-1] = 1 # DOWN
+        if (a[i][j] < a[i][j-1]-5):
+            a[i][j] = a[i][j-1]-5
+            b[i-1][j-1]= 2 # RIGHT
+        if (a[i][j] < 0):
+            a[i][j] = 0
+            b[i-1][j-1]= 0 # NULL    
+
+#print (a)
+
+maxim = 0
+for i in range(len(a)):
+    for j in range(len(a[0])):
+        if a[i][j] > maxim:
+            maxim = a[i][j]
+
+
+i = 0
+j = 0
+for n in range(len(a)):
+    for m in range(len(a[0])):
+        if a[n][m] == maxim:
+            i = n-1
+            j = m-1               
+
+alignedw=""
+alignedv=""
+while b[i][j] != 0:
+    if b[i][j] == 3: # DIAGONAL:
+        alignedw+=w[j]
+        alignedv+=v[i]
+        i-=1
+        j-=1
+    if b[i][j] == 1: # RIGHT:
+        alignedv+= "-"
+        alignedw+=w[j]
+        j-=1
+    if b[i][j] == 2: # DOWN:
+        alignedw += "-"
+        alignedv+=v[i]
+        i-=1   
+
+
+print(a[len(v)][len(w)])
+print(alignedv[-1::-1])
+print(alignedw[-1::-1])

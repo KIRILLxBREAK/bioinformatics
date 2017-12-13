@@ -1,0 +1,45 @@
+def C(S,x):
+    #return number of chars that ale lexigraphicaly smaller than x
+    counter = 0
+    for i in range(len(S)):
+        if S[i]<x:
+            counter = counter + 1
+    return counter
+def Occ(S,x,t):
+    #number of x in S[1..t[
+    counter = 0
+    for i in range(t):
+        if S[i]==x:
+            counter = counter + 1
+    return counter
+
+def LF(S,x,pos):
+    return C(S,S[pos])+Occ(S,S[pos],pos)
+
+def BWMATCHING(LastColumn, Pattern):
+    top = 0
+    bottom = len(LastColumn)-1
+    while top<=bottom:
+        if Pattern!='':
+            symbol = Pattern[-1]
+            Pattern = Pattern[:len(Pattern)-1]
+            flag = LastColumn[top:bottom+1].find(symbol)
+            if flag != -1:
+                top_index = flag+top
+                bottom_index = LastColumn[top:bottom+1].rfind(symbol)+top
+                bottom = LF(LastColumn,LastColumn[bottom_index],bottom_index )
+                top = LF(LastColumn,LastColumn[top_index],top_index )
+            else:
+                result = 0
+                break
+        else:
+            result =  bottom - top + 1; break
+    return result
+input = open('/home/sergey/Downloads/rosalind_ba9l.txt')
+output = open('/home/sergey/out29.txt', 'w')
+list = input.read().split('\n')
+pattern_list = list[1].split(' ')
+LastColumn = list[0]
+for pattern in pattern_list:
+    output.write(str(BWMATCHING(LastColumn,pattern))+' ')
+output.close()
