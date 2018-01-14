@@ -1,1 +1,6 @@
-/MARA/
+/MARA/*.zip
+/MARA/*.Rhistory
+/MARA/*.RData
+/MARA/*.gz
+/MARA/*.tmp
+/MARAMEDData/
