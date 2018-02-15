@@ -36,9 +36,11 @@ df = read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", skip=1837,
 #tail -n +1838 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 1
 
 # First and Last DataFrame Rows
+
+# random sample
 ```
 ### Data profiling
-####descriptive statistics
+#### descriptive statistics
 * summarize
 ```{r}
 summary(df)
@@ -47,6 +49,11 @@ table(df)
 * data quality
 ```{r}
 #problems(df)
+
+# патерны в missing values
+# filling missing values with egression, ANOVA, logistic regression, KNN or another modelling technique
+
+#outliers
 ```
 
 ### Quering
@@ -54,5 +61,16 @@ table(df)
 ## Feature Selection/Engineering
 
 ## Challenges
+First, we need the number of occurrences of the motifs in each of the promoters, so we need:
+* - promoter's sequence
+* - motifs
+* - [Multiple sequence alignment](https://en.wikipedia.org/wiki/Multiple_sequence_alignment)
+```{r}
+
+```
 
 ## Patterns
+Comparing with promoters from Annotations packages:
+* http://www.bioconductor.org/packages/release/data/annotation/html/BSgenome.Hsapiens.UCSC.hg19.html
+* http://www.bioconductor.org/packages/release/data/annotation/html/BSgenome.Hsapiens.UCSC.hg19.masked.html
+* http://www.bioconductor.org/packages/release/data/annotation/html/FDb.FANTOM4.promoters.hg19.html
