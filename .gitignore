@@ -1,3 +1,6 @@
-*/.ipynb_checkpoints/
-*.xmind
-.Rproj.user
+*ipynb_checkpoints/
+*Rproj.user
+*RData
+*Rhistory
+*MEDData/
+
