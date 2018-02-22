@@ -3,48 +3,66 @@ title: "CAGE-peak R Notebook"
 output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. 
+Pressing *Ctrl+Shift+Enter* to execute. 
+Press *Ctrl+Alt+I* to insert new chunk.
+Press *Ctrl+Shift+K* to preview the HTML file.
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+# Prepaid workspace
 
+```{bash warning = FALSE, message = FALSE}
+lsb_release -a
+```
 ```{r}
-setwd('/home/kirill/Documents/Projects/bioinformatics/data/MARA/')
+R.version()
+```
 
+## Importing Data
+The [data](http://fantom.gsc.riken.jp/5/datafiles/phase2.0/extra/CAGE_peaks/hg19.cage_peak_phase1and2combined_tpm_ann.osc.txt.gz) from the Fantom project.
+
+Already normalized!
+```{r message = FALSE}
 if( !any(grepl("readr", installed.packages())) ) {
   install.packages("readr")
 }
 library(readr)
-```
-
-Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
-
-When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
-
-The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
-
-## Importing Data
-[data from Fantom project](http://fantom.gsc.riken.jp/5/datafiles/phase2.0/extra/CAGE_peaks/hg19.cage_peak_phase1and2combined_tpm_ann.osc.txt.gz)
-Already normalized!
-```{r}
 df = read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", skip=1837, n_max = 10)
 ```
 
 ## EDA
 ### Basic description
-```{r}
-# !/bin/bash
-#tail -n +1838 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 1
+```{bash}
+#wc robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp
 
-# First and Last DataFrame Rows
-
-# random sample
+head -n 10 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp
 ```
+
+Можем видеть, что первые 7 колонок - дескриптиные. Каждая дальнейшая колонка соответсвует своему типу клеточной ткани.
+* 1838 - column names
+* 1839 - 01STAT:MAPPED	
+* 1840 - 02STAT:NORM_FACTOR
+* 1841 - chr10:100013403..100013414,-
+
+```{bash message = FALSE, errors = TRUE}
+# First and Last DataFrame Rows
+tail -n +1840 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 1
+tail -n 1 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp
+```
+
+
+```{bash message = FALSE}
+# Random sample
+tail -n +100000 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 1
+```
+
+
 ### Data profiling
 #### descriptive statistics
 * summarize
 ```{r}
 summary(df)
 table(df)
+str(df)
 ```
 * data quality
 ```{r}
@@ -57,12 +75,16 @@ table(df)
 ```
 
 ### Quering
-
+```{r}
+#namesTSS <- df[1838,]; col_names <- namesTSS
+df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1837, n_max = 1)
+names <- unname(unlist(df[1,]))
+```
 ## Feature Selection/Engineering
 
 ## Challenges
 First, we need the number of occurrences of the motifs in each of the promoters, so we need:
-* - promoter's sequence
+* - promoter's sequence (http://www.bioconductor.org/packages/release/data/annotation/html/BSgenome.Hsapiens.UCSC.hg19.html)
 * - motifs
 * - [Multiple sequence alignment](https://en.wikipedia.org/wiki/Multiple_sequence_alignment)
 ```{r}
@@ -70,20 +92,4 @@ First, we need the number of occurrences of the motifs in each of the promoters,
 ```
 
 ## Patterns
-Comparing with promoters from Annotations packages:
-* http://www.bioconductor.org/packages/release/data/annotation/html/BSgenome.Hsapiens.UCSC.hg19.html
-* http://www.bioconductor.org/packages/release/data/annotation/html/BSgenome.Hsapiens.UCSC.hg19.masked.html
-* http://www.bioconductor.org/packages/release/data/annotation/html/FDb.FANTOM4.promoters.hg19.html
 
-
-```{bash}
-lsb_release -a
-```
-
-```{python}
-x = 'hello, python world!'
-print(x.split(' '))
-
-import sys
-print sys.version
-```

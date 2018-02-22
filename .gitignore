@@ -1,7 +1,9 @@
 *ipynb_checkpoints/
 *Rproj.user
+*Rproj
 *RData
 *Rhistory
 *MEDData/
 *gz
 *tmp
+.Rproj.user
