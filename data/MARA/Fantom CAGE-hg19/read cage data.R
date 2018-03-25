@@ -1,5 +1,6 @@
 # read file
-setwd('/home/kirill/Documents/Projects/bioinformatics/data/MARA/CAGE-hg19/')
+setwd('/home/kirill/Documents/Projects/bioinformatics/bioinformatics/data/MARA/Fantom CAGE-hg19/')
+
 
 # http://fantom.gsc.riken.jp/5/datafiles/phase2.0/extra/CAGE_peaks/hg19.cage_peak_phase1and2combined_tpm_ann.osc.txt.gz
 # tail -n +1841 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 1
