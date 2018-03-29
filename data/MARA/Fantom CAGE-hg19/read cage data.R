@@ -1,7 +1,5 @@
-# read file
+# read file ----
 setwd('/home/kirill/Documents/Projects/bioinformatics/bioinformatics/data/MARA/Fantom CAGE-hg19/')
-
-
 # http://fantom.gsc.riken.jp/5/datafiles/phase2.0/extra/CAGE_peaks/hg19.cage_peak_phase1and2combined_tpm_ann.osc.txt.gz
 # tail -n +1841 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 1
 # 1838 - column namesss
@@ -12,11 +10,15 @@ if( !any(grepl("readr", installed.packages())) ) {
   install.packages("readr")
 }
 library(readr)
-df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840)#, n_max = 100)
+df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840, n_max = 100)
 #problems(df)
-# parse TSS (transcription starting sites) ranges
+
+
+
+# parse TSS (transcription starting sites) ranges ----
 chr <- df[[1]]
-#save(chr, file="chr.rd"); load("chr.rd") 
+save(df, file="df.rd"); 
+rm(df)#; load("df.rd") 
 chr <- gsub(",", ":", chr) # меняем запятую на двоеточие
 print(head(chr))
 
@@ -27,7 +29,11 @@ library('GenomicRanges')
 chr <- as(chr, "GRanges") # http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/GenomicRanges/html/GRanges-class.html
 print(head(chr))
 sum(width(chr))/length(chr) # средняя длина
+save(chr, file="chr.rd")#load("chr.rd") 
 
+
+
+# Human Genome 19  promoters compare ----
 # http://www.bioconductor.org/packages/release/data/annotation/manuals/BSgenome.Hsapiens.UCSC.hg19/man/BSgenome.Hsapiens.UCSC.hg19.pdf
 if( !any(grepl("TxDb.Hsapiens.UCSC.hg19.knownGene", installed.packages())) ) {
   library(BiocInstaller)
@@ -58,7 +64,7 @@ oddRatio <- overlapMat[1,1] * overlapMat[2,2] / (overlapMat[2,1] * overlapMat[1,
 oddRatio
 
 
-# Seqs
+# Seqs ----
 if( !any(grepl("BSgenome.Hsapiens.UCSC.hg19", installed.packages())) ) {
   library(BiocInstaller)
   biocLite("BSgenome")
@@ -78,3 +84,10 @@ library(Biostrings)
 #seqlevels(gr)
 pm_seq = getSeq(hg, chr)
 writeXStringSet(pm_seq, file="hg19_promoters.fasta", format="fasta")
+rm(ch)
+
+# group by transcriptiom ----
+if( !any(grepl("dplyr", installed.packages())) ) {
+  install.packages("dplyr")
+}
+library(dplyr)
