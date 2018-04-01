@@ -2,6 +2,13 @@
 setwd('/home/kirill/Documents/Projects/bioinformatics/bioinformatics/data/MARA/Fantom CAGE-hg19/')
 # http://fantom.gsc.riken.jp/5/datafiles/phase2.0/extra/CAGE_peaks/hg19.cage_peak_phase1and2combined_tpm_ann.osc.txt.gz
 # tail -n +1841 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 1
+# 1 - 
+# 2-
+# 3- 
+# 4- 
+# 5- 
+# 6- 
+# 7- 
 # 1838 - column namesss
 # 1839 - 01STAT:MAPPED	
 # 1840 - 02STAT:NORM_FACTOR
@@ -12,7 +19,7 @@ if( !any(grepl("readr", installed.packages())) ) {
 library(readr)
 df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840, n_max = 100)
 #problems(df)
-
+df <- df[,1:100]
 
 
 # parse TSS (transcription starting sites) ranges ----
@@ -86,8 +93,21 @@ pm_seq = getSeq(hg, chr)
 writeXStringSet(pm_seq, file="hg19_promoters.fasta", format="fasta")
 rm(ch)
 
-# group by transcriptiom ----
+# group by transcriptiom (matrix E), second branch ----
 if( !any(grepl("dplyr", installed.packages())) ) {
   install.packages("dplyr")
 }
 library(dplyr)
+
+load('df.rd')
+#varNames <- paste('var', 1:1837)
+df1 <-  df %>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) =="entrezgene:") %>%
+group_by(X5)  %>%  summarise_all(sum, na.rm = TRUE)
+rm('df.rd')
+save(df1, 'df1.rds')
+
+# group by transcriptiom (matrix M), first branch ----
+load('df.rd')
+
+chr <- df[, colnames(df)=="X1" | colnames(df)=="X5"]
+chr %>% filter(substr(X5,1,11) =="entrezgene:")
