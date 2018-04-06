@@ -24,18 +24,32 @@ df <- df[,1:100]
 
 # parse TSS (transcription starting sites) ranges ----
 chr <- df[[1]]
-save(df, file="df.rd"); 
-rm(df)#; load("df.rd") 
+class(chr)
 chr <- gsub(",", ":", chr) # меняем запятую на двоеточие
+#chr <- as.data.frame(chr)
+class(chr)
 print(head(chr))
 
 if( !any(grepl("GenomicRanges", installed.packages())) ) {
   install.packages("GenomicRanges")
 }
 library('GenomicRanges')
-chr <- as(chr, "GRanges") # http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/GenomicRanges/html/GRanges-class.html
-print(head(chr))
-sum(width(chr))/length(chr) # средняя длина
+range <- as(chr, "GRanges") # http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/GenomicRanges/html/GRanges-class.html
+print(head(range))
+sum(width(range))/length(range) # средняя длина
+#as.data.frame(range)
+entrezgene_id <-  df[[5]] 
+mcols(range)$engeze_id <-entrezgene_id
+grl = split(range, values(range)$engeze_id)
+#table(elementLengths(grl))
+merged = reduce(grl)#, min.gapwidth=100L)
+#range %>% group_by() %>% subset(range, engeze_id == "lacA")
+getSeq(seqs, merged)
+
+save(df, file="df.rd"); 
+rm(df)#; load("df.rd") 
+
+motifs <- data.frame(chr=chr, ranges=range)
 save(chr, file="chr.rd")#load("chr.rd") 
 
 
@@ -89,8 +103,10 @@ library(Biostrings)
 #matchPattern("GGCGC", hg[[25]])
 #gr <- GRanges(c("chr1", "chr2"), IRanges(start=c(3, 4), width=10))
 #seqlevels(gr)
-pm_seq = getSeq(hg, chr)
-writeXStringSet(pm_seq, file="hg19_promoters.fasta", format="fasta")
+pm_seq <-  getSeq(hg, unlist(merged))
+#pm_seq <-  getSeq(hg, chr)
+writeXStringSet(pm_seq, file="hg19_promoters.mfa", format="fasta")
+#readDNAStringSet
 rm(ch)
 
 # group by transcriptiom (matrix E), second branch ----
