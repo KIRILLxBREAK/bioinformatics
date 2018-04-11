@@ -23,33 +23,28 @@ df <- df[,1:100]
 
 
 # parse TSS (transcription starting sites) ranges ----
-chr <- df[[1]]
-class(chr)
-chr <- gsub(",", ":", chr) # меняем запятую на двоеточие
+chr <- df[, colnames(df)=="X1" | colnames(df)=="X5"] %>% filter(substr(X5,1,11) =="entrezgene:")
 #chr <- as.data.frame(chr)
-class(chr)
-print(head(chr))
+
+save(df, file="df.rd"); 
+rm(df)#; load("df.rd") 
 
 if( !any(grepl("GenomicRanges", installed.packages())) ) {
   install.packages("GenomicRanges")
 }
 library('GenomicRanges')
-range <- as(chr, "GRanges") # http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/GenomicRanges/html/GRanges-class.html
+range <- as(gsub(",", ":", chr[[1]]), "GRanges") # http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/GenomicRanges/html/GRanges-class.html
 print(head(range))
+#seqlevels(gr)
 sum(width(range))/length(range) # средняя длина
-#as.data.frame(range)
-entrezgene_id <-  df[[5]] 
-mcols(range)$engeze_id <-entrezgene_id
-grl = split(range, values(range)$engeze_id)
+#as.data.frame(range) - Granges to dataframe
+
+mcols(range)$entrezgene_id <- chr[[2]]
+grl = split(range, values(range)$entrezgene_id)
 #table(elementLengths(grl))
-merged = reduce(grl)#, min.gapwidth=100L)
-#range %>% group_by() %>% subset(range, engeze_id == "lacA")
-getSeq(seqs, merged)
+merged = unlist(reduce(grl))#, min.gapwidth=100L)
 
-save(df, file="df.rd"); 
-rm(df)#; load("df.rd") 
-
-motifs <- data.frame(chr=chr, ranges=range)
+#motifs <- data.frame(chr=chr[[2]], ranges=range)# %>% subset(range, substr(X5,1,11) =="entrezgene:")
 save(chr, file="chr.rd")#load("chr.rd") 
 
 
@@ -69,7 +64,7 @@ sum(width(promoters))/length(promoters)
 # length(unique(queryHits(ov))) / length(promoters)
 # length(unique(subjectHits(ov))) / length(promoters)
 prom <- reduce(promoters, ignore.strand = FALSE)
-peaks <- reduce(chr)
+peaks <- reduce(range)
 both <- intersect(prom, peaks)
 only.prom <- setdiff(prom, both)
 only.peaks <- setdiff(peaks, both)
@@ -100,14 +95,10 @@ hg = BSgenome.Hsapiens.UCSC.hg19
 #hg[[25]]
 
 library(Biostrings)
-#matchPattern("GGCGC", hg[[25]])
-#gr <- GRanges(c("chr1", "chr2"), IRanges(start=c(3, 4), width=10))
-#seqlevels(gr)
-pm_seq <-  getSeq(hg, unlist(merged))
-#pm_seq <-  getSeq(hg, chr)
+pm_seq <-  getSeq(hg, merged)
 writeXStringSet(pm_seq, file="hg19_promoters.mfa", format="fasta")
 #readDNAStringSet
-rm(ch)
+rm(chr)
 
 # group by transcriptiom (matrix E), second branch ----
 if( !any(grepl("dplyr", installed.packages())) ) {
@@ -121,9 +112,3 @@ df1 <-  df %>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) 
 group_by(X5)  %>%  summarise_all(sum, na.rm = TRUE)
 rm('df.rd')
 save(df1, 'df1.rds')
-
-# group by transcriptiom (matrix M), first branch ----
-load('df.rd')
-
-chr <- df[, colnames(df)=="X1" | colnames(df)=="X5"]
-chr %>% filter(substr(X5,1,11) =="entrezgene:")
