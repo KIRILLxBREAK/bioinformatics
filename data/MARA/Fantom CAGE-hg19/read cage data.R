@@ -17,14 +17,18 @@ if( !any(grepl("readr", installed.packages())) ) {
   install.packages("readr")
 }
 library(readr)
-df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840, n_max = 100)
-#problems(df)
+df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840, n_max = 100)#problems(df)
 df <- df[,1:100]
 
+entrezgene <-df[,5] #df[, colnames(df)=="X5"] %>% filter(substr(X5,1,11) =="entrezgene:")
+length(unique(entrezgene[[1]]))
 
 # parse TSS (transcription starting sites) ranges ----
+if( !any(grepl("dplyr", installed.packages())) ) {
+  install.packages("dplyr")
+}
+library(dplyr)
 chr <- df[, colnames(df)=="X1" | colnames(df)=="X5"] %>% filter(substr(X5,1,11) =="entrezgene:")
-#chr <- as.data.frame(chr)
 
 save(df, file="df.rd"); 
 rm(df)#; load("df.rd") 
@@ -40,12 +44,16 @@ sum(width(range))/length(range) # средняя длина
 #as.data.frame(range) - Granges to dataframe
 
 mcols(range)$entrezgene_id <- chr[[2]]
-grl = split(range, values(range)$entrezgene_id)
+grl = split(range, values(range)$entrezgene_id) #GRangesList
 #table(elementLengths(grl))
-merged = unlist(reduce(grl))#, min.gapwidth=100L)
-
+merged = unlist(reduce(grl))#, min.gapwidth=100L) #unsplit(grl, values(range)$entrezgene_id)
+prom <- promoters(merged) #flank
+#export(prom, con="promoteromes.gtf", format="GTF")
+# export(prom, con="promoteromes.bed", format="BED")
 #motifs <- data.frame(chr=chr[[2]], ranges=range)# %>% subset(range, substr(X5,1,11) =="entrezgene:")
-save(chr, file="chr.rd")#load("chr.rd") 
+save(chr, file="chr.rd")#load("chr.rd")
+mcols(prom)$entrezgene_id <- se
+prom <- as.data.frame(prom)
 
 
 
