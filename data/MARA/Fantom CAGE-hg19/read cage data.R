@@ -120,3 +120,21 @@ df1 <-  df %>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) 
 group_by(X5)  %>%  summarise_all(sum, na.rm = TRUE)
 rm('df.rd')
 save(df1, 'df1.rds')
+
+
+
+# genes ids and genes symbols ---
+if( !any(grepl("biomaRt", installed.packages())) ) {
+  install.packages("biomaRt")
+}
+library("biomaRt")
+listMarts()
+ensembl=useMart("ensembl")
+listDatasets(ensembl)
+ensembl = useDataset("hsapiens_gene_ensembl", mart=ensembl) # useMart("ensembl",dataset="hsapiens_gene_ensembl")
+filters = listFilters(ensembl)
+attributes = listAttributes(ensembl)
+genes <- getBM(attributes=c('entrezgene', 'entrezgene_trans_name', 'hgnc_symbol'),  # getGene()
+      #filters = 'hgnc_symbol', #'with_entrezgene', 
+      #values = 'AIRE', 
+      mart = ensembl)
