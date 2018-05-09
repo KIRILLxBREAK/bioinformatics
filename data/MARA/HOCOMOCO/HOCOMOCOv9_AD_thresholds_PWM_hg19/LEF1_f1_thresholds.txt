@@ -1,0 +1,4 @@
+thresh	P-value	%words	%seq	Nwords	Nseq	total_words	total_seq
+7.5338	0.0001	20.9%	18.4%	14	14	67	76
+5.3523	0.0005	92.5%	82.9%	62	63	67	76
+4.2901	0.001	97.0%	86.8%	65	66	67	76
