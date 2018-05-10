@@ -3,6 +3,7 @@ set -e
 set -u
 set -o pipefail
 
+# in /data/MARA/sarus
 
 # как пользоваться сарусом
 # java -cp sarus.jar ru.autosome.SARUS SP1_peaks.mfa SP1_example.pwm besthit > result.log
@@ -22,24 +23,24 @@ done
 
 
 
-# через файл и цикл globbing'ом 
-#1 promoter's list
-cat hg19_promoters.mfa | grep ">" > result.txt
-for i in ${motifs1}/* #shell expansion (filename expansion)
-do
-    paste result.txt <(java -cp sarus.jar ru.autosome.SARUS hg19_promoters.mfa $i besthit | grep -v ">" | cut -f 1) > result.txt
-done
-# finish: remove all temporary
-
-
-
-#debug
-(echo "promoters"; cat hg19_promoters.mfa | grep ">") | tee result.log | paste -s -d ',' > result.txt
-cat result.log result.txt
+(echo "promoters"; cat hg19_promoters.mfa | grep ">") | tee result.log | paste -s -d ',' > result.csv
+cat result.log result.csv
 for i in ${motifs}/*.pwm #shell expansion (filename expansion)
 do
-(echo "$(basename $i .pwm)" ; java -cp sarus.jar ru.autosome.SARUS hg19_promoters.mfa $i besthit \
- | grep -v ">" | cut -f 1) | tee result2.txt | paste -s -d ',' >> result.txt
+motifPath="$(basename $i .pwm)"
+threshold="$(python3 motif_treshold_finding.py ${motifPath})"
+(echo "${motifPath}+${threshold}" ; java -cp sarus.jar ru.autosome.SARUS hg19_promoters.mfa $i besthit \
+ | grep -v ">" | cut -f 1) | paste -s -d ',' >> result.csv
 done
-wc -l result.txt
-head result.txt
+
+
+# debug
+(echo "promoters" && echo "thresholds"; cat hg19_promoters.mfa | grep ">") | tee result.log | paste -s -d ',' > result.csv
+cat result.log result.csv
+for i in ${motifs}/*.pwm #shell expansion (filename expansion)
+do
+motifPath="$(basename $i .pwm)"
+threshold="$(python3 motif_treshold_finding.py ${motifPath})"
+(echo "${motifPath}" && echo "${threshold}" ; java -cp sarus.jar ru.autosome.SARUS hg19_promoters.mfa $i besthit \
+ | grep -v ">" | cut -f 1) | paste -s -d ',' >> result.csv
+done
