@@ -1,0 +1,2 @@
+Contains general project-wide scripts. 
+If scripts contain many files (e.g., multiple Python modules), they should reside in their own subdirectory. Isolating scripts in their own subdirectory also keeps project directoriestidy while developing these scripts (when they produce test output files).
