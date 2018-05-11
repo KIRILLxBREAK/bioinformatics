@@ -9,7 +9,7 @@
 .Rproj.user
 *.rd
 #*HOCOMOCO/
-*sarus/
+*.jar
 *raw_data/
 *mfa
 *fasta

@@ -23,16 +23,6 @@ done
 
 
 
-(echo "promoters"; cat hg19_promoters.mfa | grep ">") | tee result.log | paste -s -d ',' > result.csv
-cat result.log result.csv
-for i in ${motifs}/*.pwm #shell expansion (filename expansion)
-do
-motifPath="$(basename $i .pwm)"
-threshold="$(python3 motif_treshold_finding.py ${motifPath})"
-(echo "${motifPath}+${threshold}" ; java -cp sarus.jar ru.autosome.SARUS hg19_promoters.mfa $i besthit \
- | grep -v ">" | cut -f 1) | paste -s -d ',' >> result.csv
-done
-
 
 # debug
 (echo "promoters" && echo "thresholds"; cat hg19_promoters.mfa | grep ">") | tee result.log | paste -s -d ',' > result.csv
@@ -42,5 +32,5 @@ do
 motifPath="$(basename $i .pwm)"
 threshold="$(python3 motif_treshold_finding.py ${motifPath})"
 (echo "${motifPath}" && echo "${threshold}" ; java -cp sarus.jar ru.autosome.SARUS hg19_promoters.mfa $i besthit \
- | grep -v ">" | cut -f 1) | paste -s -d ',' >> result.csv
+ | grep -v ">" | cut -f 1 | sed 's/-Infinity/0/') | paste -s -d ',' >> result.csv
 done
