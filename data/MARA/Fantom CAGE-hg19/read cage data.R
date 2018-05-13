@@ -1,18 +1,6 @@
-# read file ----
+# 1.read file ----
 setwd('/home/kirill/Documents/Projects/bioinformatics/bioinformatics/data/MARA/Fantom CAGE-hg19/')
-# http://fantom.gsc.riken.jp/5/datafiles/phase2.0/extra/CAGE_peaks/hg19.cage_peak_phase1and2combined_tpm_ann.osc.txt.gz
-# tail -n +1841 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 1
-# 1 - 
-# 2-
-# 3- 
-# 4- 
-# 5- 
-# 6- 
-# 7- 
-# 1838 - column namesss
-# 1839 - 01STAT:MAPPED	
-# 1840 - 02STAT:NORM_FACTOR
-# 1841 - chr10:100013403..100013414,-
+
 if( !any(grepl("readr", installed.packages())) ) {
   install.packages("readr")
 }
@@ -23,7 +11,7 @@ df <- df[,1:100]
 entrezgene <-df[,5] #df[, colnames(df)=="X5"] %>% filter(substr(X5,1,11) =="entrezgene:")
 length(unique(entrezgene[[1]]))
 
-# parse TSS (transcription starting sites) ranges ----
+# 2.parse TSS (transcription starting sites) ranges ----
 if( !any(grepl("dplyr", installed.packages())) ) {
   install.packages("dplyr")
 }
@@ -57,7 +45,7 @@ prom <- as.data.frame(prom)
 
 
 
-# Human Genome 19  promoters compare ----
+# 3.Human Genome 19  promoters compare ----
 # http://www.bioconductor.org/packages/release/data/annotation/manuals/BSgenome.Hsapiens.UCSC.hg19/man/BSgenome.Hsapiens.UCSC.hg19.pdf
 if( !any(grepl("TxDb.Hsapiens.UCSC.hg19.knownGene", installed.packages())) ) {
   library(BiocInstaller)
@@ -88,7 +76,7 @@ oddRatio <- overlapMat[1,1] * overlapMat[2,2] / (overlapMat[2,1] * overlapMat[1,
 oddRatio
 
 
-# Seqs ----
+# 4.Seqs ----
 if( !any(grepl("BSgenome.Hsapiens.UCSC.hg19", installed.packages())) ) {
   library(BiocInstaller)
   biocLite("BSgenome")
@@ -96,19 +84,13 @@ if( !any(grepl("BSgenome.Hsapiens.UCSC.hg19", installed.packages())) ) {
 }
 library(BSgenome.Hsapiens.UCSC.hg19)
 hg = BSgenome.Hsapiens.UCSC.hg19
-#organism(hg)
-#providerVersion(hg)
-#provider(hg)
-#seqinfo(hg)
-#hg[[25]]
+print( c(organism(hg), providerVersion(hg), provider(hg), seqinfo(hg)) )
 
 library(Biostrings)
 pm_seq <-  getSeq(hg, merged)
-writeXStringSet(pm_seq, file="hg19_promoters.mfa", format="fasta")
-#readDNAStringSet
-rm(chr)
+writeXStringSet(pm_seq, file="hg19_promoters.mfa", format="fasta") #readDNAStringSet
 
-# group by transcriptiom (matrix E), second branch ----
+# 5.group by transcriptiom (matrix E), second branch ----
 if( !any(grepl("dplyr", installed.packages())) ) {
   install.packages("dplyr")
 }
@@ -123,7 +105,7 @@ save(df1, 'df1.rds')
 
 
 
-# genes ids and genes symbols ---
+# 6.genes ids and genes symbols ----
 if( !any(grepl("biomaRt", installed.packages())) ) {
   install.packages("biomaRt")
 }

@@ -20,7 +20,6 @@ df.drop(['thresholds'], axis=1, inplace=True)
 # сделать фильтрацию (оставить только f1 и si)
 df['suffix'] = df['promoters'].apply(lambda x: x.split('_')[1])
 df['prom'] = df['promoters'].apply(lambda x: x.split('_')[0])
-
 df2 = df.iloc[:, -2:].copy()
 suffix_score = {"si" : 1, "f1" : 2, "f2" : 3, "do" : 4}
 suffix_score_obr = {"1" : "si", "2" : "f1", "3" : "f2", "4" : "do"}
@@ -34,6 +33,11 @@ df3["suffix"] = df3['suffix_score'].map(suffix_score_obr)
 df3['promoters'] = df3['prom'] + df3['suffix']
 promoters_list = df3['promoters'].tolist()
 
+# список промотеров в файле
+with open("promoters_list.txt", 'w') as f:
+    for s in promoters_list:
+        f.write(str(s) + '\n')
+
 df = df[df.promoters.isin(promoters_list)]
 #df = df.set_index(['promoters'])
 df.drop(['suffix','prom'], axis=1, inplace=True)
@@ -41,10 +45,10 @@ df.drop(['suffix','prom'], axis=1, inplace=True)
 
 M = df.values
 M = M.T
-print(M)
+#print(M)
 cols.remove('thresholds')#; cols.remove('motifs')
-print(len(cols))
+#print(len(cols))
 df = pd.DataFrame(M, index=cols)
-print(df.head(10))
+#print(df.head(10))
 
 df.to_csv('test.csv', sep=',', header=False)

@@ -18,7 +18,7 @@ motifs1=$"../HOCOMOCO/PWM1"
 for i in ${motifs}/*
 do
 results_file="$(basename $i).pwm"
-cat $i | tr -s ' ' '\t' | sed -e '/^\s*$/d' | sed 's/$'"/`echo \\\r`/" > "${motifs}/$results_file"
+cat $i | tr -s ' ' '\t' | sed -e '/^\s*$/d' | sed 's/$'"/`echo \\\r`/" > "${motifs1}/$results_file"
 done
 
 
@@ -27,7 +27,7 @@ done
 # debug
 (echo "promoters" && echo "thresholds"; cat hg19_promoters.mfa | grep ">") | tee result.log | paste -s -d ',' > result.csv
 cat result.log result.csv
-for i in ${motifs}/*.pwm #shell expansion (filename expansion)
+for i in ${motifs1}/*.pwm #shell expansion (filename expansion)
 do
 motifPath="$(basename $i .pwm)"
 threshold="$(python3 motif_treshold_finding.py ${motifPath})"
