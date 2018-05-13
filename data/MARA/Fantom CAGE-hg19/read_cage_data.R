@@ -69,7 +69,7 @@ if( !any(grepl("dplyr", installed.packages())) ) {
 }
 library(dplyr)
 load('df.rd')
-dfE <- df %>% select(-X1, -X5, -X3, -X4, -X6, -X7)
+dfE <- df %>% select(-X1, -X3, -X4, -X5, -X6, -X7)
 path_to_E <- "../../../analysis/E.csv"
 write.table(dfE, file=path_to_E, sep=',', row.names = F, col.names = F)
 save(dfE, file='dfE.rd')
@@ -87,9 +87,9 @@ if( !any(grepl("GenomicRanges", installed.packages())) ) {
 library('GenomicRanges')
 range <- as(gsub(",", ":", chr[[1]]), "GRanges") # http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/GenomicRanges/html/GRanges-class.html
 sum(width(range))/length(range) # средняя длина
-#as.data.frame(range) - Granges to dataframe
 mcols(range)$entrezgene_id <- paste(chr[[2]], chr[[3]], sep=';')
-save(range, file='range.rd')#rm(chr)
+save(range, file='range.rd')
+rm(range) ; rm(chr)
 #export(prom, con="promoteromes.gtf", format="GTF")
 #export(prom, con="promoteromes.bed", format="BED")
 
@@ -106,9 +106,10 @@ print( c(organism(hg), providerVersion(hg), provider(hg), seqinfo(hg)) )
 
 library(Biostrings)
 load('range.rd')
-prom <- promoters(range) #prom <- promoters(merged)
-pm_seq <-  getSeq(hg, range)
+prom <- promoters(range); rm(range) #flunk
+pm_seq <-  getSeq(hg, prom); save(prom, file='prom.rd'); rm(prom)
 writeXStringSet(pm_seq, file="hg19_promoters.mfa", format="fasta") #readDNAStringSet
+rm(pm_seq) ; rm(hg)
 
 
 # 8. Human Genome 19  promoters compare ----
@@ -122,8 +123,8 @@ txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
 promoters <- promoters(txdb)
 sum(width(promoters))/length(promoters)
 
-load('range.rd')
-grl <- split(range, values(range)$entrezgene_id) #GRangesList
+load('prom.rd')
+grl <- split(range, values(prom)$entrezgene_id) #GRangesList
 merged <- unlist(reduce(grl))#, min.gapwidth=100L) #unsplit(grl, values(range)$entrezgene_id)
 
 #ov <- findOverlaps(chr, promoters) # any type of overlap (start, end, within, equal)
