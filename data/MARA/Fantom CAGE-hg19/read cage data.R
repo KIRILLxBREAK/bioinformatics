@@ -5,20 +5,72 @@ if( !any(grepl("readr", installed.packages())) ) {
   install.packages("readr")
 }
 library(readr)
-df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840, n_max = 100)#problems(df)
-df <- df[,1:100]
+df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840)#, n_max = 10000)#problems(df)
+#df <- df[,1:100]
+save(df, file="df.rd"); #load('df.rd)
+rm(df)
 
-entrezgene <-df[,5] #df[, colnames(df)=="X5"] %>% filter(substr(X5,1,11) =="entrezgene:")
-length(unique(entrezgene[[1]]))
-
-# 2.parse TSS (transcription starting sites) ranges ----
+# 2.group by transcriptiom (matrix E), second branch ----
 if( !any(grepl("dplyr", installed.packages())) ) {
   install.packages("dplyr")
 }
 library(dplyr)
-chr <- df[, colnames(df)=="X1" | colnames(df)=="X5"] %>% filter(substr(X5,1,11) =="entrezgene:")
 
-save(df, file="df.rd"); 
+load('df.rd')
+#varNames <- paste('var', 1:1837)
+dfA <-  df %>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) =="entrezgene:") %>%
+  group_by(X5)  %>%  summarise_all(sum, na.rm = TRUE)
+rm('df')
+save(dfA, file='dfA.rd') #load("dfA.rd") 
+rm(dfA)
+
+# 3.genes ids and genes symbols ----
+if( !any(grepl("biomaRt", installed.packages())) ) {
+  install.packages("biomaRt")
+}
+library("biomaRt")
+# listMarts(); listDatasets(ensembl)
+# ensembl = useMart("ensembl"); ensembl = useDataset("hsapiens_gene_ensembl", mart=ensembl) # 
+ensembl <- useMart("ensembl", dataset="hsapiens_gene_ensembl")
+#filters = listFilters(ensembl); attributes = listAttributes(ensembl)
+genes <- getBM(attributes=c('entrezgene', 'hgnc_symbol'),  # getGene()
+               #filters = 'hgnc_symbol', #'with_entrezgene', 
+               #values = 'AIRE', 
+               mart = ensembl)
+rm(ensembl)
+genes <- genes[complete.cases(genes), ]
+genes$entrezgene_id <- paste('entrezgene', genes$entrezgene, sep=":")
+save(genes, file='genes.rd') #load("genes.rd") 
+rm(genes)
+
+
+
+# 4.existing motif filtering ----
+path_to_motif <- '../../../analysis/filter_motifs.txt'
+motifs <- read.csv(path_to_motif, header = T, stringsAsFactors = F)
+load("genes.rd") 
+genes <- genes[ which(genes$hgnc_symbol %in% motifs$motif_name) ,]
+rm(motifs)
+
+load('dfA.rd')
+#dfA <- dfA[ which(dfA$X5 %in% genes$entrezgene_id) ,]
+rownames(dfA) <- dfA$X5
+dfA <- dfA[ genes$entrezgene_id,]
+dfA <- dfA[ which(!is.na(dfA$X5)),]
+rm(genes)
+path_to_A <- "../../../analysis/A.csv"
+write.table(dfA, file=path_to_A, sep=',', row.names = F, col.names = F)
+save(dfA, file='dfA.rd')
+rm(dfA)
+
+
+# 5. parse TSS (transcription starting sites) ranges ----
+if( !any(grepl("dplyr", installed.packages())) ) {
+  install.packages("dplyr")
+}
+library(dplyr)
+load(df)
+chr <- df[, colnames(df)=="X1" | colnames(df)=="X5"] %>% filter(substr(X5,1,11) =="entrezgene:")
 rm(df)#; load("df.rd") 
 
 if( !any(grepl("GenomicRanges", installed.packages())) ) {
@@ -45,7 +97,7 @@ prom <- as.data.frame(prom)
 
 
 
-# 3.Human Genome 19  promoters compare ----
+# 6. Human Genome 19  promoters compare ----
 # http://www.bioconductor.org/packages/release/data/annotation/manuals/BSgenome.Hsapiens.UCSC.hg19/man/BSgenome.Hsapiens.UCSC.hg19.pdf
 if( !any(grepl("TxDb.Hsapiens.UCSC.hg19.knownGene", installed.packages())) ) {
   library(BiocInstaller)
@@ -76,7 +128,7 @@ oddRatio <- overlapMat[1,1] * overlapMat[2,2] / (overlapMat[2,1] * overlapMat[1,
 oddRatio
 
 
-# 4.Seqs ----
+# 7. Seqs ----
 if( !any(grepl("BSgenome.Hsapiens.UCSC.hg19", installed.packages())) ) {
   library(BiocInstaller)
   biocLite("BSgenome")
@@ -90,33 +142,3 @@ library(Biostrings)
 pm_seq <-  getSeq(hg, merged)
 writeXStringSet(pm_seq, file="hg19_promoters.mfa", format="fasta") #readDNAStringSet
 
-# 5.group by transcriptiom (matrix E), second branch ----
-if( !any(grepl("dplyr", installed.packages())) ) {
-  install.packages("dplyr")
-}
-library(dplyr)
-
-load('df.rd')
-#varNames <- paste('var', 1:1837)
-df1 <-  df %>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) =="entrezgene:") %>%
-group_by(X5)  %>%  summarise_all(sum, na.rm = TRUE)
-rm('df.rd')
-save(df1, 'df1.rds')
-
-
-
-# 6.genes ids and genes symbols ----
-if( !any(grepl("biomaRt", installed.packages())) ) {
-  install.packages("biomaRt")
-}
-library("biomaRt")
-listMarts()
-ensembl=useMart("ensembl")
-listDatasets(ensembl)
-ensembl = useDataset("hsapiens_gene_ensembl", mart=ensembl) # useMart("ensembl",dataset="hsapiens_gene_ensembl")
-filters = listFilters(ensembl)
-attributes = listAttributes(ensembl)
-genes <- getBM(attributes=c('entrezgene', 'entrezgene_trans_name', 'hgnc_symbol'),  # getGene()
-      #filters = 'hgnc_symbol', #'with_entrezgene', 
-      #values = 'AIRE', 
-      mart = ensembl)

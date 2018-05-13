@@ -25,7 +25,7 @@ score_suffix <- list("1"="si", "2"="f1", '3'="f2", '4'="do")
 motif_filterd$suffix <- unlist(score_suffix[motif_filterd$suffix_score])
 motif_filterd$motif <-  paste(motif_filterd$motif_name, motif_filterd$suffix, sep="_")
 
+motif_filterd <- motif_filterd[, c('motif_name', 'motif') ]
+
 path_to_filterd_motif <- "../../analysis/filter_motifs.txt"
-fileConn<-file(path_to_filterd_motif)
-writeLines(motif_filterd$motif, fileConn)
-close(fileConn)
+write.table(motif_filterd, file=path_to_filterd_motif, quote = F, sep = ',', row.names = F, col.names = T)
