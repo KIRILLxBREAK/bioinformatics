@@ -1,16 +1,18 @@
 # 1.read file ----
-setwd('/home/kirill/Documents/Projects/bioinformatics/bioinformatics/data/MARA/Fantom CAGE-hg19/')
+print('point 1')
+#setwd('/home/kirill/Documents/Projects/bioinformatics/bioinformatics/data/MARA/Fantom CAGE-hg19/')
 if( !any(grepl("readr", installed.packages())) ) {
   install.packages("readr")
 }
 library(readr)
-df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840, n_max = 10000)#problems(df)
+df <- read_table2("robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840)#, n_max = 100)#problems(df)
 #df <- df[,1:100]
 save(df, file="df.rd"); #load('df.rd)
 rm(df)
 
 
 # 2.group by TF ----
+print('point 2')
 if( !any(grepl("dplyr", installed.packages())) ) {
   install.packages("dplyr")
 }
@@ -25,6 +27,7 @@ rm(dfA)
 
 
 # 3.genes ids and genes symbols ----
+print('point 3')
 if( !any(grepl("biomaRt", installed.packages())) ) {
   install.packages("biomaRt")
 }
@@ -45,6 +48,7 @@ rm(genes)
 
 
 # 4.existing motif filtering ----
+print('point 4')
 path_to_motif <- '../../../analysis/filter_motifs.txt'
 motifs <- read.csv(path_to_motif, header = T, stringsAsFactors = F)
 load("genes.rd") 
@@ -64,6 +68,7 @@ rm(dfA)
 
 
 # 5.matrix E ----
+print('point 5')
 if( !any(grepl("dplyr", installed.packages())) ) {
   install.packages("dplyr")
 }
@@ -77,6 +82,7 @@ rm(dfE)
 
 
 # 6.parse TSS (transcription starting sites) ranges ----
+print('point 6')
 load(df)
 chr <- df[, colnames(df)=="X1" | colnames(df)=="X2" | colnames(df)=="X5"] #%>% filter(substr(X5,1,11) =="entrezgene:")
 rm(df)#; load("df.rd") 
@@ -95,6 +101,7 @@ rm(range) ; rm(chr)
 
 
 # 7. Seqs ----
+print('point 7')
 if( !any(grepl("BSgenome.Hsapiens.UCSC.hg19", installed.packages())) ) {
   library(BiocInstaller)
   biocLite("BSgenome")
@@ -113,6 +120,7 @@ rm(pm_seq) ; rm(hg)
 
 
 # 8. Human Genome 19  promoters compare ----
+print('point 8')
 # http://www.bioconductor.org/packages/release/data/annotation/manuals/BSgenome.Hsapiens.UCSC.hg19/man/BSgenome.Hsapiens.UCSC.hg19.pdf
 if( !any(grepl("TxDb.Hsapiens.UCSC.hg19.knownGene", installed.packages())) ) {
   library(BiocInstaller)
