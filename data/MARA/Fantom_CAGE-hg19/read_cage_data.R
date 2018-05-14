@@ -4,7 +4,7 @@ if( !any(grepl("readr", installed.packages())) ) {
   install.packages("readr")
 }
 library(readr)
-df <- read_table2("../raw_data/robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840, n_max = 100)#problems(df)
+df <- read_table2("../raw_data/robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840)#, n_max = 10000)#problems(df)
 #df <- df[,1:100]
 save(df, file="df.rd"); rm(df)
 
