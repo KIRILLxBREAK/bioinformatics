@@ -31,15 +31,12 @@ print('point 3')
 if( !any(grepl("biomaRt", installed.packages())) ) {
   install.packages("biomaRt")
 }
-library("biomaRt")
-# listMarts(); listDatasets(ensembl)
-# ensembl = useMart("ensembl"); ensembl = useDataset("hsapiens_gene_ensembl", mart=ensembl) # 
+library("biomaRt") # listMarts(); listDatasets(ensembl)
+
+# ensembl = useMart("ensembl"); ensembl = useDataset("hsapiens_gene_ensembl", mart=ensembl)
 ensembl <- useMart("ensembl", dataset="hsapiens_gene_ensembl")
 #filters = listFilters(ensembl); attributes = listAttributes(ensembl)
-genes <- getBM(attributes=c('entrezgene', 'hgnc_symbol'),  # getGene()
-               #filters = 'hgnc_symbol', #'with_entrezgene', 
-               #values = 'AIRE', 
-               mart = ensembl)
+genes <- getBM(attributes=c('entrezgene', 'hgnc_symbol'), mart = ensembl) # getGene()
 rm(ensembl)
 genes <- genes[complete.cases(genes), ]
 genes$entrezgene_id <- paste('entrezgene', genes$entrezgene, sep=":")
@@ -56,7 +53,6 @@ genes <- genes[ which(genes$hgnc_symbol %in% motifs$motif_name) ,]
 rm(motifs)
 
 load('dfA.rd')
-#dfA <- dfA[ which(dfA$X5 %in% genes$entrezgene_id) ,]
 rownames(dfA) <- dfA$X5
 dfA <- dfA[ genes$entrezgene_id,]
 dfA <- dfA[ which(!is.na(dfA$X5)),]
