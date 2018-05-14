@@ -51,4 +51,4 @@ cols.remove('thresholds')#; cols.remove('motifs')
 df = pd.DataFrame(M, index=cols)
 #print(df.head(10))
 
-df.to_csv('test.csv', sep=',', header=False)
+df.to_csv('../../../analysis/M.csv', sep=',', header=False)
