@@ -1,5 +1,5 @@
-path_to_motif <- "../../analysis/motif.txt"
-motifs <- read.table(path_to_motif, stringsAsFactors = F, header = T)
+path_to_motif <- "../../analysis/motifs.txt"
+motifs <- read.table(path_to_motif, stringsAsFactors = F, header = F)
 colnames(motifs) <- c("motif")
 
 motif_suffix <- function(motif) {
