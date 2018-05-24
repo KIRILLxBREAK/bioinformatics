@@ -1,0 +1,18 @@
+python:
+    numpy
+    pandas
+
+R:
+    readr
+    dplyr
+    BiocInstaller
+    biomaRt
+    GenomicRanges
+    Biostrings
+    BSgenome
+    BSgenome.Hsapiens.UCSC.hg19
+    TxDb.Hsapiens.UCSC.hg19.knownGene
+
+
+
+
