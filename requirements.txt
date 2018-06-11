@@ -1,17 +1,7 @@
-python:
-    numpy
-    pandas
+numpy==1.13.3
+pandas==0.20.3
+scipy==0.19.1
 
-R:
-    readr
-    dplyr
-    BiocInstaller
-    biomaRt
-    GenomicRanges
-    Biostrings
-    BSgenome
-    BSgenome.Hsapiens.UCSC.hg19
-    TxDb.Hsapiens.UCSC.hg19.knownGene
 
 
 
