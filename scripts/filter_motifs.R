@@ -1,4 +1,4 @@
-path_to_motif <- "../../analysis/motifs.txt"
+path_to_motif <- "../analysis/motifs.txt"
 motifs <- read.table(path_to_motif, stringsAsFactors = F, header = F)
 colnames(motifs) <- c("motif")
 
@@ -27,5 +27,5 @@ motif_filterd$motif <-  paste(motif_filterd$motif_name, motif_filterd$suffix, se
 
 motif_filterd <- motif_filterd[, c('motif_name', 'motif') ]
 
-path_to_filterd_motif <- "../../analysis/filter_motifs.txt"
+path_to_filterd_motif <- "../analysis/filter_motifs.txt"
 write.table(motif_filterd, file=path_to_filterd_motif, quote = F, sep = ',', row.names = F, col.names = T)

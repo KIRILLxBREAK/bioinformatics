@@ -3,13 +3,9 @@
 *Rproj
 *RData
 *Rhistory
-*MEDData/
-*gz
-*tmp
 .Rproj.user
 *.rd
 #*HOCOMOCO/
-*.jar
 *raw_data/
 *mfa
 *fasta
