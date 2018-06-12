@@ -36,13 +36,8 @@
 Читаем файл начиная со строки 1841 (после комментариев и нормировочных констант) в переменную `df`. 
 Сохраняем переменную в двоичный файл и далее вся работа происходит с ней, изначальный файл не трогаем.
 ```{r message = FALSE}
-if( !any(grepl("readr", installed.packages())) ) {
-  install.packages("readr")
-}
 library(readr)
-df <- read_table2("../raw_data/robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840)#, n_max = 10000)#problems(df)
-#df <- df[,1:100]
-save(df, file="df.rd"); rm(df)
+df <- read_table2("../raw_data/robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp", col_names = FALSE, skip=1840)
 ```
 
 ## 2.Суммарная экспрессия каждого ТФ по всем альтернитивным промоторам
@@ -50,32 +45,31 @@ save(df, file="df.rd"); rm(df)
 сгруппировав по этому id гена. 
 На выходе `dfA` для матрицы А.
 ```{r}
-if( !any(grepl("dplyr", installed.packages())) ) {
-  install.packages("dplyr")
-}
 library(dplyr)
-load('df.rd') #varNames <- paste('var', 1:1837)
+load('df.rd')
 dfA <-  df %>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) =="entrezgene:") %>%
   group_by(X5)  %>%  summarise_all(sum, na.rm = TRUE)
-rm('df')
+save(df, file="df.rd"); rm(df)
 save(dfA, file='dfA.rd') ; rm(dfA)
 ```
 
 ## 3.Получение HUGO-символов ТФ по их id (hgnc или entrezgene)
 Данную информацию получаем через BiomaRt (для запуска этого блока потребуется подключение к интернету).
+Список доступных мартов, датасетов, а также их атрибутов и фильтров можно получить следующими командами:
+```{r}
+#listMarts()
+#listDatasets(ensembl)
+#listFilters(ensembl)
+#listAttributes(ensembl)
+```
 На выходе файл _genes.rd_ с таблицей соответствия.
 ```{r}
-if( !any(grepl("biomaRt", installed.packages())) ) {
-  library(BiocInstaller)
-  biocLite("biomaRt")
-}
-library(biomaRt) # listMarts(); listDatasets(ensembl); ilters = listFilters(ensembl); attributes = listAttributes(ensembl)
-ensembl <- useMart("ensembl", dataset="hsapiens_gene_ensembl") # ensembl = useMart("ensembl"); ensembl = useDataset("hsapiens_gene_ensembl", mart=ensembl)
-genes <- getBM(attributes=c('entrezgene', 'hgnc_symbol'), mart = ensembl) # getGene()
-rm(ensembl)
+library(biomaRt)
+ensembl <- useMart("ensembl", dataset="hsapiens_gene_ensembl")
+genes <- getBM(attributes=c('entrezgene', 'hgnc_symbol'), mart = ensembl)
 genes <- genes[complete.cases(genes), ]
 genes$entrezgene_id <- paste('entrezgene', genes$entrezgene, sep=":")
-save(genes, file='genes.rd') ;rm(genes)
+save(genes, file='genes.rd') ; rm(genes) ; rm(ensembl)
 ```
 
 ## 4.Фильтрация матрицы А по имеющимся ТФ
@@ -83,8 +77,7 @@ save(genes, file='genes.rd') ;rm(genes)
 чтобы остались только промотеры генов-ТФ, соответсвующие мотивам в нашей базе. 
 На выходе - опять `dfA` для матрицы А. Также сама матрица записана в csv-файл _analysis/A.csv_.
 ```{r}
-path_to_motif <- '../../analysis/filter_motifs.txt'
-motifs <- read.csv(path_to_motif, header = T, stringsAsFactors = F)
+motifs <- read.csv('../../analysis/filter_motifs.txt', header = T, stringsAsFactors = F)
 load("genes.rd") 
 genes <- genes[ which(genes$hgnc_symbol %in% motifs$motif_name) ,]
 rm(motifs)
@@ -93,10 +86,8 @@ load('dfA.rd')
 rownames(dfA) <- dfA$X5
 dfA <- dfA[ genes$entrezgene_id,]
 dfA <- dfA[ which(!is.na(dfA$X5)),]
-rm(genes)
-path_to_A <- "../../analysis/A.csv"
-write.table(dfA, file=path_to_A, sep=',', row.names = F, col.names = F)
-save(dfA, file='dfA.rd') ; rm(dfA)
+write.table(dfA, file='../../analysis/A.csv', sep=',', row.names = F, col.names = F)
+save(dfA, file='dfA.rd') ; rm(dfA) ; rm(genes)
 ```
 
 ## 5.Получение матрицы E
@@ -104,10 +95,8 @@ save(dfA, file='dfA.rd') ; rm(dfA)
 Здесь удаляются колонки с метаданными и результат пишется в csv. Заголовок в файле отсутствует.
 ```{r}
 load('df.rd')
-#dfE <- df %>% select(-X1, -X3, -X4, -X5, -X6, -X7)
 dfE <- df[, colnames(df)!="X1" & colnames(df)!="X3" & colnames(df)!="X4" & colnames(df)!="X5" & colnames(df)!="X6"& colnames(df)!="X7"]
-path_to_E <- "../../analysis/E.csv"
-write.table(dfE, file=path_to_E, sep=',', row.names = F, col.names = F)
+write.table(dfE, file='../../analysis/E.csv', sep=',', row.names = F, col.names = F)
 save(dfE, file='dfE.rd') ; rm(dfE)
 ```
 **Этот этап должен быть переписан на bash**.
@@ -116,20 +105,16 @@ save(dfE, file='dfE.rd') ; rm(dfE)
 Рейнджы нужны для двух последний пунктов. **Фильтрация стооблцов должна быть переписана на _bash_**.
 `tail -n +1841 robust_phase1_pls_2.tpm.desc121113.osc.txt.gz.tmp | head -n 100 | cut -f1,2,5`.
 ```{r}
+library(GenomicRanges)
+
 load('df.rd')
 chr <- df[, colnames(df)=="X1" | colnames(df)=="X2" | colnames(df)=="X5"] #%>% filter(substr(X5,1,11) =="entrezgene:")
 rm(df)
 
-if( !any(grepl("GenomicRanges", installed.packages())) ) {
-  library(BiocInstaller)
-  biocLite("GenomicRanges")
-}
-library(GenomicRanges)
-range <- as(gsub(",", ":", chr[[1]]), "GRanges") # http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/GenomicRanges/html/GRanges-class.html
+range <- as(gsub(",", ":", chr[[1]]), "GRanges")
 #sum(width(range))/length(range) # средняя длина
 mcols(range)$entrezgene_id <- paste(chr[[2]], chr[[3]], sep=';')
-save(range, file='range.rd')
-rm(range) ; rm(chr)
+save(range, file='range.rd') ; rm(range) ; rm(chr)
 ```
 
 ## 7.Получение последовательностей пикам по рейнджам
@@ -137,28 +122,18 @@ rm(range) ; rm(chr)
 Используется рефересный геном человека, обернутый в R-пакет: _BSgenome.Hsapiens.UCSC.hg19_.
 На выходе - файл *data/seqs/hg19_promoters.mfa*, и в названии последовательности указан рейнджи и id гена (если есть).
 ```{r}
-if( !any(grepl("BSgenome.Hsapiens.UCSC.hg19", installed.packages())) ) {
-  library(BiocInstaller)
-  biocLite("BSgenome")
-  biocLite("BSgenome.Hsapiens.UCSC.hg19")
-}
-library(BSgenome.Hsapiens.UCSC.hg19)
-hg = BSgenome.Hsapiens.UCSC.hg19
-print( c(organism(hg), providerVersion(hg), provider(hg), seqinfo(hg)) )
-
-if( !any(grepl("Biostrings", installed.packages())) ) {
-  library(BiocInstaller)
-  biocLite("Biostrings")
-}
 library(Biostrings)
+library(BSgenome.Hsapiens.UCSC.hg19)
+
+hg = BSgenome.Hsapiens.UCSC.hg19
+#print( c(organism(hg), providerVersion(hg), provider(hg), seqinfo(hg)) )
+
 load('range.rd')
-prom <- promoters(range); rm(range) #flunk
+prom <- promoters(range); rm(range)
 #sum(width(prom))/length(prom) # средняя длина
 pm_seq <-  getSeq(hg, prom); save(prom, file='prom.rd'); rm(prom)
-writeXStringSet(pm_seq, file="../seqs/hg19_promoters.mfa", format="fasta") #readDNAStringSet
+writeXStringSet(pm_seq, file='../seqs/hg19_promoters.mfa', format="fasta")
 rm(pm_seq) ; rm(hg)
-#export(prom, con="../seqs/promoteromes.gtf", format="GTF")
-#export(prom, con="../seqs/promoteromes.bed", format="BED")
 ```
 
 ## 8.Анализ пересечения CAGE-пиков и аннотированных промотеров
