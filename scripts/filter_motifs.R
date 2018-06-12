@@ -1,3 +1,5 @@
+#!/usr/local/bin/Rscript
+
 path_to_motif <- "../analysis/motifs.txt"
 motifs <- read.table(path_to_motif, stringsAsFactors = F, header = F)
 colnames(motifs) <- c("motif")

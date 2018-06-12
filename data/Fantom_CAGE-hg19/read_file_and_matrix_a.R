@@ -18,4 +18,4 @@ library(dplyr)
 dfA <-  df %>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) =="entrezgene:") %>%
   group_by(X5)  %>%  summarise_all(sum, na.rm = TRUE)
 save(df, file="df.rd"); rm(df)
-save(dfA, file='dfA.rd') ; rm(dfA)
+save(dfA, file='dfA.rd') ; rm(dfA) 
