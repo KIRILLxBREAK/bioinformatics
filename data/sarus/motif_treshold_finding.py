@@ -6,7 +6,7 @@ import sys
 
 # in '/bioinformatics/data/MARA/sarus'
 #print(os.getcwd())
-motifThresholdPath = '../HOCOMOCO/HOCOMOCOv9_AD_thresholds_PWM_hg19/' + sys.argv[1] + '_thresholds.txt'
+motifThresholdPath = '../MARA/HOCOMOCO/HOCOMOCOv9_AD_thresholds_PWM_hg19/' + sys.argv[1] + '_thresholds.txt'
 #print(motifThresholdPath)
 
 thresholds = np.genfromtxt(motifThresholdPath)[-1,0]

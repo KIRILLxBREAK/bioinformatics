@@ -4,7 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('result.csv', index_col='promoters')
+df = pd.read_csv('../../analysis/result.csv', index_col='promoters')
 #df.set_index(['promoters'], inplace=True)
 
 df = df.mask(df.lt(df['thresholds'], axis=0), 0)    # обнулить все значения ниже порога
@@ -18,7 +18,7 @@ df.drop(['thresholds'], axis=1, inplace=True)
 
 
 # сделать фильтрацию (оставить только f1 и si)
-df['suffix'] = df['promoters'].apply(lambda x: x.split('_')[1])
+"""df['suffix'] = df['promoters'].apply(lambda x: x.split('_')[1])
 df['prom'] = df['promoters'].apply(lambda x: x.split('_')[0])
 df2 = df.iloc[:, -2:].copy()
 suffix_score = {"si" : 1, "f1" : 2, "f2" : 3, "do" : 4}
@@ -31,7 +31,11 @@ df3 = df3.to_frame().reset_index()
 suffix_score_obr = {1 : "_si", 2 : "_f1", 3 : "_f2", 4 : "_do"}
 df3["suffix"] = df3['suffix_score'].map(suffix_score_obr)
 df3['promoters'] = df3['prom'] + df3['suffix']
-promoters_list = df3['promoters'].tolist()
+promoters_list = df3['promoters'].tolist()"""
+
+overall_motifs_path = '../../analysis/overall_motifs.txt'
+overall_motifs = pd.read_csv(overall_motifs_path)
+promoters_list = overall_motifs['motif_name'].tolist()
 
 # список промотеров в файле
 """with open("promoters_list.txt", 'w') as f:
