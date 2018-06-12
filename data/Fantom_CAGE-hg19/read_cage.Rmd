@@ -51,8 +51,7 @@ save(df, file="df.rd"); rm(df)
 На выходе `dfA` для матрицы А.
 ```{r}
 if( !any(grepl("dplyr", installed.packages())) ) {
-  library(BiocInstaller)
-  biocLite("biomaRt")
+  install.packages("readr")
 }
 library(dplyr)
 load('df.rd') #varNames <- paste('var', 1:1837)
