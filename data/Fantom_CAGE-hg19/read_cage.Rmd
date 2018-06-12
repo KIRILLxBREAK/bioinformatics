@@ -51,7 +51,7 @@ save(df, file="df.rd"); rm(df)
 На выходе `dfA` для матрицы А.
 ```{r}
 if( !any(grepl("dplyr", installed.packages())) ) {
-  install.packages("readr")
+  install.packages("dplyr")
 }
 library(dplyr)
 load('df.rd') #varNames <- paste('var', 1:1837)
