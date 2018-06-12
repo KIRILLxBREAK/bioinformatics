@@ -135,7 +135,7 @@ rm(range) ; rm(chr)
 ## 7.Получение последовательностей пикам по рейнджам
 Последовательности промотеров необходимы для подсчета кол-ва вхождений в них мотивов (матрица M).
 Используется рефересный геном человека, обернутый в R-пакет: _BSgenome.Hsapiens.UCSC.hg19_.
-На выходе - файл *hg19_promoters.mfa*, и в названии последовательности указан рейнджи и id гена (если есть).
+На выходе - файл *data/seqs/hg19_promoters.mfa*, и в названии последовательности указан рейнджи и id гена (если есть).
 ```{r}
 if( !any(grepl("BSgenome.Hsapiens.UCSC.hg19", installed.packages())) ) {
   library(BiocInstaller)
@@ -146,7 +146,7 @@ library(BSgenome.Hsapiens.UCSC.hg19)
 hg = BSgenome.Hsapiens.UCSC.hg19
 print( c(organism(hg), providerVersion(hg), provider(hg), seqinfo(hg)) )
 
-if( !any(grepl("BSgenome.Hsapiens.UCSC.hg19", installed.packages())) ) {
+if( !any(grepl("Biostrings", installed.packages())) ) {
   library(BiocInstaller)
   biocLite("Biostrings")
 }
