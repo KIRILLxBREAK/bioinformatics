@@ -41,7 +41,10 @@ Documenting:
 Скрипт - `data/MARA/sarus/motif_occurences.sh`. На выходе - `data/MARA/sarus/result.csv`.
 В файле заголовок (нобез индекса) записи вида:
 ```
-promoter,threshold,seq_promoter1,seq_promoter2
+promoters,thresholds,seq_name1,seq_name2,...
+motif1,threshold1,..
+....
+motifN,thresholdN,...
 ```
 
 

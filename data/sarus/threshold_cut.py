@@ -15,6 +15,9 @@ cols.insert(0, "motifs")
 df = df.reset_index()
 df.drop(['thresholds'], axis=1, inplace=True)
 
+print(df.shape)
+df.to_pickle('df.pkl') #pd.read_pickle('foo.pkl')
+
 
 
 # сделать фильтрацию (оставить только f1 и si)
@@ -35,7 +38,7 @@ promoters_list = df3['promoters'].tolist()"""
 
 overall_motifs_path = '../../analysis/overall_motifs.txt'
 overall_motifs = pd.read_csv(overall_motifs_path)
-promoters_list = overall_motifs['motif_name'].tolist()
+promoters_list = overall_motifs['motif'].tolist()
 
 # список промотеров в файле
 """with open("promoters_list.txt", 'w') as f:
@@ -44,12 +47,12 @@ promoters_list = overall_motifs['motif_name'].tolist()
 
 df = df[df.promoters.isin(promoters_list)]
 #df = df.set_index(['promoters'])
-df.drop(['suffix','prom'], axis=1, inplace=True)
+"""df.drop(['suffix','prom'], axis=1, inplace=True)"""
 
 
 M = df.values
 M = M.T
-#print(M)
+print(M,shape)
 cols.remove('thresholds')#; cols.remove('motifs')
 #print(len(cols))
 df = pd.DataFrame(M, index=cols)
