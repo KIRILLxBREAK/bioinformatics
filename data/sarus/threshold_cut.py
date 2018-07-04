@@ -36,7 +36,8 @@ df3["suffix"] = df3['suffix_score'].map(suffix_score_obr)
 df3['promoters'] = df3['prom'] + df3['suffix']
 promoters_list = df3['promoters'].tolist()"""
 
-overall_motifs_path = '../../analysis/overall_motifs.txt'
+overall_motifs_path = '../../analysis/filter_motifs.txt'
+#overall_motifs_path = '../../analysis/overall_motifs.txt'
 overall_motifs = pd.read_csv(overall_motifs_path)
 promoters_list = overall_motifs['motif'].tolist()
 

@@ -52,7 +52,7 @@ Documenting:
 #### 6.Получение матрицы вхождений
 Для каждого промотера из `data/seqs/hg19_promoters.mfa` (полученного на предыдущем пункте) считается 
 количество вхождний в него каждого мотива (полученных на шаге 2).
-Скрипт - `data/MARA/sarus/motif_occurences.sh`. На выходе - `data/MARA/sarus/result.csv`.
+Скрипт - `data/MARA/sarus/motif_occurences.sh`. На выходе - `analysis/result.csv`.
 В файле заголовок (нобез индекса) записи вида:
 ```
 promoters,thresholds,seq_name1,seq_name2,...
