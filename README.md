@@ -69,3 +69,6 @@ SVD: M = U*D*Vt => EA = (V*Dt*Ut*U*D*Vt)-1*V*Dt*Ut *B = (V*Dt*D*Vt)-1*V*Dt*Ut *B
  = V * (Dt*D)-1 * Dt *Ut * B = V * D-1 * Ut * B
 ```
 На выходе - матрица активности ТФ в файлу `analysis/ACT.csv`.
+
+### Deployments
+cwl-runner expirements.cwl job-inputs.yml
