@@ -34,14 +34,31 @@ Documenting:
 На выходе матрицы A и E (`analysis/A.csv` и `anaysis/E.csv` соответственно), сиквенс промотеров
 для данных TSS в файле `data/seqs/hg19_promoters.mfa`, а также мотивы из файла `analysis/filter_motifs.txt`, для ТФ которых есть данные по экспрессии в Фантоме - записанные в `analysis/overall_motifs`.
 Файлы `A.csv` и `E.csv` без заголовков, но с индексами.
+### 5.1 
+Скрипт `1. read_file_and_matrix_a.R`. На выходе `df.rd`  и `dfA.rf`.
+
+### 5.2
+Скрипт `2. gene_symbols_mapping.R`. На выходе `genes.rd`.
+
+### 5.3
+Скрипт `3. existing_motif_filtering.R`. На выходе `dfA.rd`, `analysis/overall_motifs.txt' и `analysis/A.csv`.
+
+### 5.4
+Скрипт `4. matrix_e.R`. На выходе `analysis.E.csv` и `dfE.rd`.
+
+### 5.5
+Скрипт `5. promoters_seqs.R`. На выходе `range.rd`, `prom.rd` и `data/seqs/hg19_promoters.mfa`.
 
 #### 6.Получение матрицы вхождений
 Для каждого промотера из `data/seqs/hg19_promoters.mfa` (полученного на предыдущем пункте) считается 
 количество вхождний в него каждого мотива (полученных на шаге 2).
-Скрипт - `data/MARA/sarus/motif_occurences.sh`. На выходе - `data/MARA/sarus/result.csv`.
+Скрипт - `data/MARA/sarus/motif_occurences.sh`. На выходе - `analysis/result.csv`.
 В файле заголовок (нобез индекса) записи вида:
 ```
-promoter,threshold,seq_promoter1,seq_promoter2
+promoters,thresholds,seq_name1,seq_name2,...
+motif1,threshold1,..
+....
+motifN,thresholdN,...
 ```
 
 
