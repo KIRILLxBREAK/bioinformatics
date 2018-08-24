@@ -9,8 +9,8 @@ set -o pipefail
 
 
 # переменные
-motifs=$"../MARA/HOCOMOCO/PWM"
-motifs1=$"../MARA/HOCOMOCO/PWM1"
+motifs=$"../HOCOMOCO/PWM"
+motifs1=$"../HOCOMOCO/PWM1"
 
 
 (echo "promoters" && echo "thresholds"; cat "../seqs/hg19_promoters.mfa" | grep ">") | gpaste -s -d ',' > ../../analysis/result.csv

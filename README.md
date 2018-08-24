@@ -11,12 +11,12 @@ Documenting:
 
 ### Этапы:
 #### 1.Парсинг скачанных мотивов
-Скрипт - `data/MARA/HOCOMOCO/pwm_long_file_parse.py`. Из одного большого файла на выходе имеем по одному 
-файлу для каждого мотива в папке _data/MARA/HOCOMOCO/PWM_.
+Скрипт - `data/HOCOMOCO/pwm_long_file_parse.py`. Из одного большого файла на выходе имеем по одному 
+файлу для каждого мотива в папке _data/HOCOMOCO/PWM_.
 
 #### 2.Подготовка распарсинных мотивов
 Предподготовка pwm для sarus (замена пробелов на табы, удаление пустых строк, замена LF на CRLF).
-Скрипт - `data/MARA/HOCOMOCO/motif preparation.sh`.
+Скрипт - `data/HOCOMOCO/motif preparation.sh`.
 Для каждого файла мотива из папке PWM создается подготовленный файл в папке PWM1.
 Также записывает в `analysis/motifs.txt` список всех мотивов. Этот файл будет использоваться на следущем шаге.
 
@@ -26,7 +26,7 @@ Documenting:
 Скрипт - `scripts/filter_motifs.R`. На выходе - файл `analysis/filter_motifs.txt` со таблицей отфильтрованных мотивов.
 
 #### 4.Скрипт для получения порога
-Файл - `data/MARA/sarus/motif_treshold_finding.py`. Будет использоваться другим скриптом на **шаге 6**. 
+Файл - `data/sarus/motif_treshold_finding.py`. Будет использоваться другим скриптом на **шаге 6**. 
 На входе получает имя мотива, на выходе - его порог.
 
 #### 5.Обработка данных Fantom
@@ -41,7 +41,7 @@ Documenting:
 Скрипт `2. gene_symbols_mapping.R`. На выходе `genes.rd`.
 
 ### 5.3
-Скрипт `3. existing_motif_filtering.R`. На выходе `dfA.rd`, `analysis/overall_motifs.txt' и `analysis/A.csv`.
+Скрипт `3. existing_motif_filtering.R`. На выходе `dfA.rd`, `analysis/overall_motifs.txt` и `analysis/A.csv`.
 
 ### 5.4
 Скрипт `4. matrix_e.R`. На выходе `analysis.E.csv` и `dfE.rd`.
@@ -52,7 +52,7 @@ Documenting:
 #### 6.Получение матрицы вхождений
 Для каждого промотера из `data/seqs/hg19_promoters.mfa` (полученного на предыдущем пункте) считается 
 количество вхождний в него каждого мотива (полученных на шаге 2).
-Скрипт - `data/MARA/sarus/motif_occurences.sh`. На выходе - `analysis/result.csv`.
+Скрипт - `data/sarus/motif_occurences.sh`. На выходе - `analysis/result.csv`.
 В файле заголовок (нобез индекса) записи вида:
 ```
 promoters,thresholds,seq_name1,seq_name2,...
@@ -74,7 +74,7 @@ motifN,thresholdN,...
 а также файл `analysis/M.csv` с готовой матрицей М.
 
 #### 8.Подсчет матрицы активности промотеров
-Используются полученные ранее матрицы E,M,A. Скрипт - `scripts/MARA/MARA.py`.
+Используются полученные ранее матрицы E,M,A. Скрипт - `scripts/MARA.py`.
 ```
 E = M * EA
 

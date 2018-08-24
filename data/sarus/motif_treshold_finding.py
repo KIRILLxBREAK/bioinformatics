@@ -4,9 +4,9 @@ import os
 import numpy as np
 import sys
 
-# in '/bioinformatics/data/MARA/sarus'
+# in '/bioinformatics/data/sarus'
 #print(os.getcwd())
-motifThresholdPath = '../MARA/HOCOMOCO/HOCOMOCOv9_AD_thresholds_PWM_hg19/' + sys.argv[1] + '_thresholds.txt'
+motifThresholdPath = '../HOCOMOCO/HOCOMOCOv9_AD_thresholds_PWM_hg19/' + sys.argv[1] + '_thresholds.txt'
 #print(motifThresholdPath)
 
 thresholds = np.genfromtxt(motifThresholdPath)[-1,0]
