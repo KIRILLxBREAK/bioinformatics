@@ -2,7 +2,7 @@
 
 cwlVersion: v1.0
 class: CommandLineTool
-baseCommand: echo
+baseCommand: python3
 inputs:
   example_file:
     type: File?
