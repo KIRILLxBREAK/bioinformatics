@@ -1,4 +1,4 @@
-Contain many smaller analyses — for example:
+Can contain many smaller analyses — for example:
 * analyzing the quality of raw sequences
 * the aligner output
 * the final data that will produce figures and tables for a paper. 
@@ -7,4 +7,8 @@ It allows collaborators to see these high-level analyses without having to dig d
 
 Files:
 * motifx.txt - collection of all motifs in HOCOMOCO
-* motif_filt - filtered collection of motifs in HOCOMOCO
+* filter_motifs.txt - duplicates' filtered collection of motifs in HOCOMOCO
+* overall_motifs.txt - motitfs and coresponded TFs with assoiation with entrezgene_id
+* cluster_list.txt - list of promoters' clusters
+* samples.txt - list of tisssues from FANTOM expression data
+
