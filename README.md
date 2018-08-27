@@ -41,10 +41,10 @@ Documenting:
 Скрипт `2. gene_symbols_mapping.R`. На выходе `genes.rd`.
 
 ### 5.3
-Скрипт `3. existing_motif_filtering.R`. На выходе `dfA.rd`, `analysis/overall_motifs.txt` и `analysis/A.csv`.
+Скрипт `3. existing_motif_filtering.R`. На выходе `dfA.rd`, `analysis/overall_motifs.txt` и `analysis/csv/A.csv`.
 
 ### 5.4
-Скрипт `4. matrix_e.R`. На выходе `analysis.E.csv` и `dfE.rd`.
+Скрипт `4. matrix_e.R`. На выходе `analysis/csv/E.csv` и `dfE.rd`.
 
 ### 5.5
 Скрипт `5. promoters_seqs.R`. На выходе `range.rd`, `prom.rd` и `data/seqs/hg19_promoters.mfa`.
@@ -52,7 +52,7 @@ Documenting:
 #### 6.Получение матрицы вхождений
 Для каждого промотера из `data/seqs/hg19_promoters.mfa` (полученного на предыдущем пункте) считается 
 количество вхождний в него каждого мотива (полученных на шаге 2).
-Скрипт - `data/sarus/motif_occurences.sh`. На выходе - `analysis/result.csv`.
+Скрипт - `data/sarus/motif_occurences.sh`. На выходе - `analysis/csv/result.csv`.
 В файле заголовок (нобез индекса) записи вида:
 ```
 promoters,thresholds,seq_name1,seq_name2,...
@@ -85,7 +85,7 @@ SVD: M = U*D*Vt => EA = (V*Dt*Ut*U*D*Vt)-1*V*Dt*Ut *B = (V*Dt*D*Vt)-1*V*Dt*Ut *B
  = ( (DVt)t*(DVt) )-1*V*Dt*Ut *B = (V*(Dt*D)*Vt)-1*V*Dt*Ut *B = Vt-1*(Dt*D)-1*V-1*V*Dt*Ut *B =
  = V * (Dt*D)-1 * Dt *Ut * B = V * D-1 * Ut * B
 ```
-На выходе - матрица активности ТФ в файлу `analysis/ACT.csv`.
+На выходе - матрица активности ТФ в файлу `analysis/csv/ACT.csv`.
 
 ### Deployments
 cwl-runner expirements.cwl job-inputs.yml

@@ -4,7 +4,7 @@ import os
 import numpy as np
 import pandas as pd
 
-df = pd.read_csv('../../analysis/result.csv', index_col='promoters')
+df = pd.read_csv('../../analysis/csv/result.csv', index_col='promoters')
 #df.set_index(['promoters'], inplace=True)
 
 df = df.mask(df.lt(df['thresholds'], axis=0), 0)    # обнулить все значения ниже порога
@@ -59,4 +59,4 @@ cols.remove('thresholds')#; cols.remove('motifs')
 df = pd.DataFrame(M, index=cols)
 #print(df.head(10))
 
-df.to_csv('../../analysis/M.csv', sep=',', header=False)
+df.to_csv('../../analysis/csv/M.csv', sep=',', header=False)

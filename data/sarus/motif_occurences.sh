@@ -13,11 +13,11 @@ motifs=$"../HOCOMOCO/PWM"
 motifs1=$"../HOCOMOCO/PWM1"
 
 
-(echo "promoters" && echo "thresholds"; cat "../seqs/hg19_promoters.mfa" | grep ">") | gpaste -s -d ',' > ../../analysis/result.csv
+(echo "promoters" && echo "thresholds"; cat "../seqs/hg19_promoters.mfa" | grep ">") | gpaste -s -d ',' > ../../analysis/csv/result.csv
 for i in ${motifs1}/*.pwm #shell expansion (filename expansion)
 do
 motifPath="$(basename $i .pwm)"
 threshold="$(python3 motif_treshold_finding.py ${motifPath})"
 (echo "${motifPath}" && echo "${threshold}" ; java -cp sarus.jar ru.autosome.SARUS "../seqs/hg19_promoters.mfa" $i besthit \
- | grep -v ">" | cut -f 1 | sed 's/-Infinity/0/') | gpaste -s -d ',' >> ../../analysis/result.csv
+ | grep -v ">" | cut -f 1 | sed 's/-Infinity/0/') | gpaste -s -d ',' >> ../../analysis/csv/result.csv
 done

@@ -4,9 +4,9 @@ import numpy as np
 import pandas as pd
 
 # Matrix reading
-M = pd.read_csv('../analysis/M.csv', index_col='motifs').values
-E = pd.read_csv('../analysis/E.csv', header=None, index_col=0).values
-A = pd.read_csv('../analysis/A.csv', header=None, index_col=0).values
+M = pd.read_csv('../analysis/csv/M.csv', index_col='motifs').values
+E = pd.read_csv('../analysis/csv/E.csv', header=None, index_col=0).values
+A = pd.read_csv('../analysis/csv/A.csv', header=None, index_col=0).values
 
 np.save('M.npy', M)
 np.save('E.npy', E)
@@ -23,7 +23,7 @@ from scipy import linalg
 temp = np.dot( linalg.inv(D.T.dot(D)), D.T ).dot(U.T)
 EA = np.dot(np.dot(Vt.T, temp), E)
 np.save('EA.npy', EA)
-np.savetxt('EA.csv', EA, delimiter=',')
+np.savetxt('../analysis/csv/EA.csv', EA, delimiter=',')
 
 #ACT = EA/A
 #np.savetxt('act.csv', ACT, delimiter=',')
