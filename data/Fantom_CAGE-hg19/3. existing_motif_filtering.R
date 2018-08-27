@@ -2,11 +2,11 @@
 
 path_to_motif <- '../../analysis/filter_motifs.txt'
 motifs <- read.csv(path_to_motif, header = T, stringsAsFactors = F)
-load("genes.rd") 
+load("../temp_rdata/genes.rd") 
 genes <- genes[ which(genes$hgnc_symbol %in% motifs$motif_name) ,]
 rm(motifs)
 
-load('dfA.rd')
+load('../temp_rdata/dfA.rd')
 rownames(dfA) <- dfA$X5
 dfA <- dfA[ genes$entrezgene_id,]
 dfA <- dfA[ which(!is.na(dfA$X5)),]
@@ -21,4 +21,4 @@ rm(genes) ; rm(overall_motifs) ; rm(filtered_motifs)
 
 path_to_A <- "../../analysis/A.csv"
 write.table(dfA, file=path_to_A, sep=',', row.names = F, col.names = F)
-save(dfA, file='dfA.rd') ; rm(dfA)
+save(dfA, file='../temp_rdata/dfA.rd') ; rm(dfA)
