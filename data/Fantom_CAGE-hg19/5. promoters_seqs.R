@@ -34,7 +34,9 @@ library(Biostrings)
 load('../temp_rdata/range.rd')
 prom <- promoters(range); rm(range) #flunk
 #sum(width(prom))/length(prom) # средняя длина
+seq_names <- prom$entrezgene_id
 pm_seq <-  getSeq(hg, prom); save(prom, file='../temp_rdata/prom.rd'); rm(prom)
+names(pm_seq) <- seq_names
 writeXStringSet(pm_seq, file="../seqs/hg19_promoters.mfa", format="fasta") #readDNAStringSet
 rm(pm_seq) ; rm(hg)
 #export(prom, con="../seqs/promoteromes.gtf", format="GTF")
