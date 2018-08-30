@@ -5,8 +5,8 @@ import pandas as pd
 
 # Matrix reading
 M = pd.read_csv('../analysis/csv/M.csv', index_col='motifs').values
-E = pd.read_csv('../analysis/csv/E.csv', header=None, index_col=0).values
-A = pd.read_csv('../analysis/csv/A.csv', header=None, index_col=0).values
+E = pd.read_csv('../analysis/csv/E.csv', index_col=0).values
+A = pd.read_csv('../analysis/csv/A.csv', index_col=0).values
 
 np.save('M.npy', M)
 np.save('E.npy', E)

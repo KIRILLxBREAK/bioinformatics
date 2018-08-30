@@ -30,10 +30,10 @@ Documenting:
 На входе получает имя мотива, на выходе - его порог.
 
 #### 5.Обработка данных Fantom
-Скрипт - `data/MARA/Fantom_CAGE-hg19/read_cage_data.R`.
-На выходе матрицы A и E (`analysis/A.csv` и `anaysis/E.csv` соответственно), сиквенс промотеров
+Скрипты - в папке `data/Fantom_CAGE-hg19/`.
+На выходе матрицы A и E (`analysis/csv/A.csv` и `anaysis/csv/E.csv` соответственно), сиквенс промотеров
 для данных TSS в файле `data/seqs/hg19_promoters.mfa`, а также мотивы из файла `analysis/filter_motifs.txt`, для ТФ которых есть данные по экспрессии в Фантоме - записанные в `analysis/overall_motifs`.
-Файлы `A.csv` и `E.csv` без заголовков, но с индексами.
+Файлы `A.csv` и `E.csv` c заголовками и индексами.
 ### 5.1 
 Скрипт `1. read_file_and_matrix_a.R`. На выходе `df.rd`  и `dfA.rf`.
 
@@ -71,7 +71,7 @@ motifN,thresholdN,...
 * фильтрация мотивов, которых нет в в Фантоме ли не ассоциированных с entrezgene_id (по файлу `analysis/overall_motifs`)
 Скрипт - `data/sarus/threshold_cut.py`. 
 На выходе - `data/sarus/promoters_list.txt` со списком отфильтрованных промотеров,
-а также файл `analysis/M.csv` с готовой матрицей М.
+а также файл `analysis/csv/M.csv` с готовой матрицей М.
 
 #### 8.Подсчет матрицы активности промотеров
 Используются полученные ранее матрицы E,M,A. Скрипт - `scripts/MARA.py`.
