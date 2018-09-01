@@ -6,7 +6,7 @@ dfE <- df[, colnames(df)!="X1" & colnames(df)!="X3" & colnames(df)!="X4"
           & colnames(df)!="X5" & colnames(df)!="X6"& colnames(df)!="X7"]
 rm(df)
 
-sample_names <- read.table('../../analysis/samles.txt', stringsAsFactors = F)[[1]]
+sample_names <- read.table('../../analysis/samples.txt', stringsAsFactors = F)[[1]]
 colnames(dfE) <- c('description', sample_names)
 
 path_to_E <- "../../analysis/csv/E.csv"

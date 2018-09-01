@@ -41,3 +41,7 @@ writeXStringSet(pm_seq, file="../seqs/hg19_promoters.mfa", format="fasta") #read
 rm(pm_seq) ; rm(hg)
 #export(prom, con="../seqs/promoteromes.gtf", format="GTF")
 #export(prom, con="../seqs/promoteromes.bed", format="BED")
+
+
+path_to_promoters_list <- "../../analysis/promoters.txt"
+write.table(seq_names, file=path_to_promoters_list, row.names = F, col.names = F)
