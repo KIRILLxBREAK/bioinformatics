@@ -35,7 +35,7 @@ Documenting:
 для данных TSS в файле `data/seqs/hg19_promoters.mfa`, а также мотивы из файла `analysis/filter_motifs.txt`, для ТФ которых есть данные по экспрессии в Фантоме - записанные в `analysis/overall_motifs`.
 Файлы `A.csv` и `E.csv` c заголовками и индексами.
 ### 5.1 
-Скрипт `1. read_file_and_matrix_a.R`. На выходе `df.rd`  и `dfA.rf`.
+Скрипт `1. read_file_and_matrix_a.R`. На выходе `df.rd`  и `dfA.rd`.
 
 ### 5.2
 Скрипт `2. gene_symbols_mapping.R`. На выходе `genes.rd`.

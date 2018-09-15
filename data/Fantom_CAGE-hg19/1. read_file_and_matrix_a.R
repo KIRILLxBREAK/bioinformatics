@@ -13,9 +13,10 @@ if( !any(grepl("dplyr", installed.packages())) ) {
   install.packages("dplyr")
 }
 library(dplyr)
+library(magrittr)
 
 #varNames <- paste('var', 1:1837)
-dfA <-  df %>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) =="entrezgene:") %>%
+dfA %<>%  select(-X1, -X2, -X3, -X4, -X6, -X7) %>% filter(substr(X5,1,11) =="entrezgene:") %>%
   group_by(X5)  %>%  summarise_all(sum, na.rm = TRUE)
 
 sample_names <- read.table('../../analysis/samles.txt', stringsAsFactors = F)[[1]]
