@@ -1,0 +1,13 @@
+library(magrittr)
+library(dplyr)
+
+dfM <- read.csv('../analysis/csv/M.csv')
+
+rownames(dfM) <-  dfM[['motifs']]
+dfM %<>% select(-motifs)
+
+dfM <- data.frame( scale(dfM, scale = F) ) #x - сolMeans()
+
+path_to_M_norm <- "../analysis/csv/M_norm.csv"
+write.table(dfM, file=path_to_M_norm, sep=',', row.names = T, col.names = T)
+save(dfM, file='../data/temp_rdata/dfE_norm.rd') ; rm(dfM)

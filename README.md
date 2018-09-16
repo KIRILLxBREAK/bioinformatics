@@ -73,7 +73,14 @@ motifN,thresholdN,...
 На выходе - `data/sarus/promoters_list.txt` со списком отфильтрованных промотеров,
 а также файл `analysis/csv/M.csv` с готовой матрицей М.
 
-#### 8.Подсчет матрицы активности промотеров
+
+#### 8. Нормализация матриц
+Скрипт `scripts/normalise_matrix_a.R`. На выходе `data/temp_rdata/dfA_norm.rd` и `analysis/csv/A_norm.csv`.
+Скрипт `scripts/normalise_matrix_e.R`. На выходе `analysis/csv/E_norm.csv` и `data/temp_rdata/dfE_norm.rd`.
+Скрипт `scripts/normalise_matrix_m.R`. На выходе `analysis/csv/M_norm.csv` и `data/temp_rdata/dfM_norm.rd`.
+
+
+#### 9.Подсчет матрицы активности промотеров
 Используются полученные ранее матрицы E,M,A. Скрипт - `scripts/MARA.py`.
 ```
 E = M * EA
