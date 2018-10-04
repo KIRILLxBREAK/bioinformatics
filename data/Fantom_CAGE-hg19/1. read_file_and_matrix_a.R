@@ -1,4 +1,5 @@
 #!/usr/local/bin/Rscript
+#system.time ({
 
 if( !any(grepl("readr", installed.packages())) ) {
   install.packages("readr")
@@ -24,3 +25,4 @@ colnames(dfA) <- c('entrezgene_id', sample_names)
 
 save(df, file="../temp_rdata/df.rd"); rm(df)
 save(dfA, file='../temp_rdata/dfA.rd') ; rm(dfA) 
+#})

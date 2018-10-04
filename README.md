@@ -85,12 +85,13 @@ motifN,thresholdN,...
 ```
 E = M * EA
 
+M = U*D*Vt
 Mt = V*Dt*Ut
 
-OLS: EA = (Mt*M)-1 * Mt * B
-SVD: M = U*D*Vt => EA = (V*Dt*Ut*U*D*Vt)-1*V*Dt*Ut *B = (V*Dt*D*Vt)-1*V*Dt*Ut *B = #т.к. матррица U - унитарна
- = ( (DVt)t*(DVt) )-1*V*Dt*Ut *B = (V*(Dt*D)*Vt)-1*V*Dt*Ut *B = Vt-1*(Dt*D)-1*V-1*V*Dt*Ut *B =
- = V * (Dt*D)-1 * Dt *Ut * B = V * D-1 * Ut * B
+OLS: EA = (Mt*M)-1 * Mt * E
+SVD: M = U*D*Vt => EA = (V*Dt*Ut*U*D*Vt)-1*V*Dt*Ut *E = (V*Dt*D*Vt)-1*V*Dt*Ut *E = #т.к. матррица U - унитарна
+ = ( (DVt)t*(DVt) )-1*V*Dt*Ut *E = (V*(Dt*D)*Vt)-1*V*Dt*Ut *E = Vt-1*(Dt*D)-1*V-1*V*Dt*Ut *E =
+ = V * (Dt*D)-1 * Dt *Ut *E = V * D-1 * Ut * E
 ```
 На выходе - матрица активности ТФ в файлу `analysis/csv/ACT.csv`.
 

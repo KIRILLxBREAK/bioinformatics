@@ -1,3 +1,5 @@
+#!/usr/local/bin/Rscript
+
 load('../data/temp_rdata/dfE.rd')
 
 dfE  <- dfE - rowMeans(dfE)

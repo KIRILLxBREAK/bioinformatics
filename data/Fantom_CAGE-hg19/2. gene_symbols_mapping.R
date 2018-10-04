@@ -1,4 +1,5 @@
 #!/usr/local/bin/Rscript
+system.time({
 
 if( !any(grepl("biomaRt", installed.packages())) ) {
   library(BiocInstaller)
@@ -12,3 +13,4 @@ rm(ensembl)
 genes <- genes[complete.cases(genes), ]
 genes$entrezgene_id <- paste('entrezgene', genes$entrezgene, sep=":")
 save(genes, file='../temp_rdata/genes.rd') ; rm(genes)
+})
