@@ -5,7 +5,8 @@ library(dplyr)
 library(sqldf)
 
 #EA <- read_csv("../../analysis/csv/EA.csv", col_names = T)
-EA <- load('../data/temp_rdata/EA.rd')
+load('../data/temp_rdata/EA.rd')
+load('../data/temp_rdata/EA_1.rd')
 A <- read_csv("../../analysis/csv/A.csv", col_names = T)
 A <- A %>%  select(-X1)
 

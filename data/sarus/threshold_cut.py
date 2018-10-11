@@ -53,7 +53,7 @@ df = df[df.promoters.isin(promoters_list)]
 
 M = df.values
 M = M.T
-print(M,shape)
+print(M.shape)
 cols.remove('thresholds')#; cols.remove('motifs')
 #print(len(cols))
 df = pd.DataFrame(M, index=cols)

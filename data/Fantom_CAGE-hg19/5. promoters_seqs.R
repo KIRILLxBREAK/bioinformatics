@@ -1,5 +1,6 @@
 #!/usr/local/bin/Rscript
-
+#system.time({
+  
 load('../temp_rdata/df.rd')
 chr <- df[, colnames(df)=="X1" | colnames(df)=="X2" | colnames(df)=="X5"] #%>% filter(substr(X5,1,11) =="entrezgene:")
 rm(df)
@@ -45,3 +46,5 @@ rm(pm_seq) ; rm(hg)
 
 path_to_promoters_list <- "../../analysis/promoters.txt"
 write.table(seq_names, file=path_to_promoters_list, row.names = F, col.names = F)
+rm(seq_names) ; rm(path_to_promoters_list)
+#})
