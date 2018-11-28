@@ -12,3 +12,8 @@ Files:
 * cluster_list.txt - list of promoters' clusters
 * samples.txt - list of tisssues from FANTOM expression data
 
+The _samples.txt_ contains all samples, and it has been devided into 2 parts:
+* samples_test.txt  - contains replic 3 of samples
+* samples_train.txt - contains all samples but replic 3
+* samples_replic_train.txt - contains all samples with replic but replic 3
+

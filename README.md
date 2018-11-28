@@ -35,7 +35,7 @@ Documenting:
 для данных TSS в файле `data/seqs/hg19_promoters.mfa`, а также мотивы из файла `analysis/filter_motifs.txt`, для ТФ которых есть данные по экспрессии в Фантоме - записанные в `analysis/overall_motifs`.
 Файлы `A.csv` и `E.csv` c заголовками и индексами.
 ### 5.1 
-Скрипт `1. read_file_and_matrix_a.R`. На выходе `df.rd`  и `dfA.rd`.
+Скрипт `1. read_file_and_matrix_a.R`. На выходе `df.rd`  и `dfA.rd` (промежуточный вариант матрицы А).
 
 ### 5.2
 Скрипт `2. gene_symbols_mapping.R`. На выходе `genes.rd`.
@@ -44,7 +44,7 @@ Documenting:
 Скрипт `3. existing_motif_filtering.R`. На выходе `dfA.rd`, `analysis/overall_motifs.txt` и `analysis/csv/A.csv`.
 
 ### 5.4
-Скрипт `4. matrix_e.R`. На выходе `analysis/csv/E.csv` и `dfE.rd`.
+Скрипт `4. matrix_e.R`. На выходе `analysis/csv/E.csv`, `dfE.rd` и `analysis/promoters.txt`.
 
 ### 5.5
 Скрипт `5. promoters_seqs.R`. На выходе `range.rd`, `prom.rd` и `data/seqs/hg19_promoters.mfa`.
@@ -68,7 +68,7 @@ motifN,thresholdN,...
 * транспонирование
 * удаление ненужных столбцов
 * -фильтрация ненужных версий мотивов на основе скора `{"si" : 1, "f1" : 2, "f2" : 3, "do" : 4}`-
-* фильтрация мотивов, которых нет в в Фантоме ли не ассоциированных с entrezgene_id (по файлу `analysis/overall_motifs`)
+* фильтрация мотивов, которых нет в в Фантоме или не ассоциированных с entrezgene_id (по файлу `analysis/overall_motifs`)
 Скрипт - `data/sarus/threshold_cut.py`. 
 На выходе - `data/sarus/promoters_list.txt` со списком отфильтрованных промотеров,
 а также файл `analysis/csv/M.csv` с готовой матрицей М.
@@ -80,7 +80,7 @@ motifN,thresholdN,...
 Скрипт `scripts/normalise_matrix_m.R`. На выходе `analysis/csv/M_norm.csv` и `data/temp_rdata/dfM_norm.rd`.
 
 
-#### 9.Подсчет матрицы активности промотеров
+#### 9. Подсчет матрицы активности промотеров
 Используются полученные ранее матрицы E,M,A. Скрипт - `scripts/MARA.py`.
 ```
 E = M * EA
@@ -94,6 +94,12 @@ SVD: M = U*D*Vt => EA = (V*Dt*Ut*U*D*Vt)-1*V*Dt*Ut *E = (V*Dt*D*Vt)-1*V*Dt*Ut *E
  = V * (Dt*D)-1 * Dt *Ut *E = V * D-1 * Ut * E
 ```
 На выходе - матрица активности ТФ в файлу `analysis/csv/ACT.csv`.
+
+### 10. Validations
+Все семплы делятся на 2 части - train subset и test subset.
+Делаем ноые матрицы E_norm_train и A_norm_train (удаляя тестовые колонки).
+Высчитываем матрицу EA_train.
+
 
 ### Deployments
 cwl-runner expirements.cwl job-inputs.yml
