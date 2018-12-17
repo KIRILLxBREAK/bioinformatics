@@ -10,9 +10,11 @@ if( !any(grepl("GenomicRanges", installed.packages())) ) {
   biocLite("GenomicRanges")
 }
 library(GenomicRanges)
+library(rtracklayer)
 range <- as(gsub(",", ":", chr[[1]]), "GRanges") # http://web.mit.edu/~r/current/arch/i386_linux26/lib/R/library/GenomicRanges/html/GRanges-class.html
 #sum(width(range))/length(range) # средняя длина
 mcols(range)$entrezgene_id <- paste(chr[[2]], chr[[3]], sep=';')
+export(range, con="../seqs/promoteromes.bed", format="BED")
 save(range, file='../temp_rdata/range.rd') ; rm(range) ; rm(chr)
 
 
@@ -40,7 +42,6 @@ pm_seq <-  getSeq(hg, prom); save(prom, file='../temp_rdata/prom.rd'); rm(prom)
 names(pm_seq) <- seq_names
 writeXStringSet(pm_seq, file="../seqs/hg19_promoters.mfa", format="fasta") #readDNAStringSet
 rm(pm_seq) ; rm(hg)
-#export(prom, con="../seqs/promoteromes.gtf", format="GTF")
 #export(prom, con="../seqs/promoteromes.bed", format="BED")
 
 
