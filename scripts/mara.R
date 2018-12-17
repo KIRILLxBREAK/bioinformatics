@@ -10,6 +10,9 @@ load('../data/temp_rdata/dfM_norm.rd')
 s <- svd(dfM) ; rm(dfM)
 d <- s$d
 
+dev = round(d/sum(d) * 100, 1)
+plot(dev[1:20])
+
 # Ordinary regression ----
 d_1 <- 1/d
 M_inv <- s$v %*% diag(d_1) %*% t(s$u) ; rm(d_1)

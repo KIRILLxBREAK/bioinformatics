@@ -1,9 +1,11 @@
-    readr
-    dplyr
-    BiocInstaller
-    biomaRt
-    GenomicRanges
-    Biostrings
-    BSgenome
-    BSgenome.Hsapiens.UCSC.hg19
-    TxDb.Hsapiens.UCSC.hg19.knownGene
+readr
+magritr
+dplyr
+BiocInstaller
+biomaRt
+GenomicRanges
+rtracklayer
+Biostrings
+BSgenome
+BSgenome.Hsapiens.UCSC.hg19
+TxDb.Hsapiens.UCSC.hg19.knownGene

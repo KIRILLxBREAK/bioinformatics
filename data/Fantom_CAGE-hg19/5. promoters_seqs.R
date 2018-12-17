@@ -35,7 +35,7 @@ if( !any(grepl("Biostrings", installed.packages())) ) {
 }
 library(Biostrings)
 load('../temp_rdata/range.rd')
-prom <- promoters(range); rm(range) #flunk
+prom <- promoters(range, upstream=500, downstream=500); rm(range) #flunk
 #sum(width(prom))/length(prom) # средняя длина
 seq_names <- prom$entrezgene_id
 pm_seq <-  getSeq(hg, prom); save(prom, file='../temp_rdata/prom.rd'); rm(prom)
