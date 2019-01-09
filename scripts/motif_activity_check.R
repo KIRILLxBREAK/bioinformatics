@@ -2,15 +2,26 @@
 
 library(readr)
 library(dplyr)
+library(magrittr)
 library(sqldf)
 
 #EA <- read_csv("../../analysis/csv/EA.csv", col_names = T)
 load('../data/temp_rdata/EA.rd')
 load('../data/temp_rdata/EA_1.rd')
-A <- read_csv("../../analysis/csv/A.csv", col_names = T)
-A <- A %>%  select(-X1)
+load("../data/temp_rdata/dfA_norm.rd")
+genes <- read.csv('../analysis/motif-genes.csv')
 
+dfA['entrezgene_id'] <- rownames(dfA)
+dfA <- merge(dfA, genes) ; rm(genes)
+rownames(dfA) <- dfA$motif
+dfA %<>% dplyr::select( -c('entrezgene', 'entrezgene_id', 'motif_name', 'motif') )
 
+corr_list <- list()
+for (i in rownames(dfA)) {
+  #print(i)
+  corr_list[[i]] <- cor( EA_1[i,], unlist(dfA[i,]), method = 'spearman' )
+}
+corr_list <- unlist(corr_list)
 # zeroCount <- function(x) {
 #   cnt <- apply(x, 1, function(y) sum(y))
 #   cnt
