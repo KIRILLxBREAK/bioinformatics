@@ -4,8 +4,10 @@ set -u
 set -o pipefail
 
 
-motifs=$"PWM"
-motifs1=$"PWM1"
+motifs=$"PWMv11"
+motifs1=$"PWM1v11"
+
+mkdir "$motifs1"
 
 # создаем в analysis файл со списком мотивов
 for i in ${motifs}/*; do echo "$(basename $i)" >> "../../analysis/motifs.txt" ; done
